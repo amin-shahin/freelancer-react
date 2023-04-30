@@ -11,7 +11,7 @@ router.post("/check-otp", expressAsyncHandler(UserAuthController.checkOtp));
 router.post(
   "/complete-profile",
   verifyAccessToken,
-  expressAsyncHandler(UserAuthController.getOtp)
+  expressAsyncHandler(UserAuthController.completeProfile)
 );
 router.get(
   "/refresh-token",
@@ -22,23 +22,21 @@ router.post(
   verifyAccessToken,
   expressAsyncHandler(UserAuthController.updateProfile)
 );
+
 // router.post(
 //   "/upload-avatar",
 //   verifyAccessToken,
 //   uploadFile.single("avatar"),
 //   expressAsyncHandler(UserAuthController.updateAvatar)
 // );
-// router.get(
-//   "/profile",
-//   verifyAccessToken,
-//   expressAsyncHandler(UserAuthController.getUserProfile)
-// );
+router.get(
+  "/profile",
+  verifyAccessToken,
+  expressAsyncHandler(UserAuthController.getUserProfile)
+);
+
 router.post("/logout", expressAsyncHandler(UserAuthController.logout));
 
 module.exports = {
   userAuthRoutes: router,
-};
-
-module.exports = {
-  userRoutes: router,
 };

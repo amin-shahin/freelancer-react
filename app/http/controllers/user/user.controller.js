@@ -5,8 +5,8 @@ const {
   setAccessToken,
   setRefreshToken,
   verifyRefreshToken,
+  getUserCartDetail,
 } = require("../../../../utils/functions");
-const Controller = require("../controller");
 const createError = require("http-errors");
 const { UserModel } = require("../../../models/user");
 const Kavenegar = require("kavenegar");
@@ -27,14 +27,14 @@ class userAuthController extends Controller {
     this.phoneNumber = null;
   }
   async getOtp(req, res) {
-    const phoneNumber = req.body.phoneNumber.toLowerCase().trim();
-    const code = generateRandomNumber(6);
-    this.code = code;
-    this.phoneNumber = phoneNumber;
+    let { phoneNumber } = req.body;
 
-    // if (!isPhoneNumber) {
-    //   throw createError.BadRequest("شماره موبایل یا ایمیل معتبر را وارد کنید");
-    // }
+    if (!phoneNumber)
+      throw createError.BadRequest("شماره موبایل معتبر را وارد کنید");
+
+    phoneNumber = phoneNumber.trim();
+    this.phoneNumber = phoneNumber;
+    this.code = generateRandomNumber(6);
 
     const result = await this.saveUser(phoneNumber);
     if (!result) throw createError.Unauthorized("ورود شما انجام نشد.");
@@ -47,28 +47,29 @@ class userAuthController extends Controller {
     const { otp: code, phoneNumber } = req.body;
 
     const user = await UserModel.findOne(
-      { phoneNumber: phoneNumber },
+      { phoneNumber },
       { password: 0, refreshToken: 0, accessToken: 0 }
-    ).populate([
-      {
-        path: "Products",
-        model: "Product",
-        select: {
-          title: 1,
-          slug: 1,
-          price: 1,
-          icon: 1,
-        },
-        // populate: [
-        //   {
-        //     // deeper
-        //     path: "seller",
-        //     model: "Seller",
-        //     select: {name:1, icon:1}
-        //   },
-        // ],
-      },
-    ]);
+    );
+    // .populate([
+    //   {
+    //     path: "Products",
+    //     model: "Product",
+    //     select: {
+    //       title: 1,
+    //       slug: 1,
+    //       price: 1,
+    //       icon: 1,
+    //     },
+    //     populate: [
+    //       {
+    //         // deeper
+    //         path: "seller",
+    //         model: "Seller",
+    //         select: { name: 1, icon: 1 },
+    //       },
+    //     ],
+    //   },
+    // ]);
 
     if (!user) throw createError.NotFound("کاربری با این مشخصات یافت نشد");
 
@@ -111,11 +112,26 @@ class userAuthController extends Controller {
       role: ROLES.USER,
     });
   }
+  async checkUserExist(phoneNumber) {
+    const user = await UserModel.findOne({ phoneNumber });
+    return user;
+  }
+  async updateUser(phoneNumber, objectData = {}) {
+    Object.keys(objectData).forEach((key) => {
+      if (["", " ", 0, null, undefined, "0", NaN].includes(objectData[key]))
+        delete objectData[key];
+    });
+    const updatedResult = await UserModel.updateOne(
+      { phoneNumber },
+      { $set: objectData }
+    );
+    return !!updatedResult.modifiedCount;
+  }
   sendOTP(phoneNumber, res) {
-    const api = Kavenegar.KavenegarApi({
+    const kaveNegarApi = Kavenegar.KavenegarApi({
       apikey: `${process.env.KAVENEGAR_API_KEY}`,
     });
-    api.VerifyLookup(
+    kaveNegarApi.VerifyLookup(
       {
         receptor: phoneNumber,
         token: this.code,
@@ -135,7 +151,10 @@ class userAuthController extends Controller {
             },
           });
 
-        throw createError.BadRequest("کد تایید ارسال نشد.");
+        return res.status(status).send({
+          statusCode: status,
+          message: "کد اعتبارسنجی ارسال نشد",
+        });
       }
     );
   }
@@ -145,7 +164,7 @@ class userAuthController extends Controller {
     const { name, email } = req.body;
 
     if (!user.isVerifiedPhoneNumber)
-      throw createError.Forbidden("ایمیل یا شماره موبایل خود را تایید کنید.");
+      throw createError.Forbidden("شماره موبایل خود را تایید کنید.");
 
     const duplicateUser = await UserModel.findOne({ email });
 
@@ -200,6 +219,25 @@ class userAuthController extends Controller {
       StatusCode: HttpStatus.OK,
       data: {
         user,
+      },
+    });
+  }
+  async getUserProfile(req, res) {
+    const { _id: userId } = req.user;
+    const user = await UserModel.findById(userId, { otp: 0 });
+    const cart = (await getUserCartDetail(userId))?.[0];
+    // const userDetail = (await getUserDetail(userId))?.[0];
+
+    // const payments = userDetail?.payments;
+    // const products = userDetail?.userProducts;
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: {
+        user,
+        // payments,
+        // products,
+        cart,
       },
     });
   }

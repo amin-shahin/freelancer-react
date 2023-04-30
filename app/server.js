@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const createError = require("http-errors");
 const path = require("path");
+const { allRoutes } = require("./router/router");
 dotenv.config();
 class Application {
   #app = express();
@@ -46,7 +47,7 @@ class Application {
     this.#app.use(cookieParser(process.env.COOKIE_PARSER_SECRET_KEY));
   }
   configRoutes() {
-    // this.#app.use("/api", allRoutes);
+    this.#app.use("/api", allRoutes);
   }
   errorHandling() {
     this.#app.use((req, res, next) => {
