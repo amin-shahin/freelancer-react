@@ -16,11 +16,13 @@ const ProductSchema = new mongoose.Schema(
     imageLink: { type: String, required: true },
     price: { type: Number, required: true },
     offPrice: { type: Number, required: true },
+    discount: { type: Number, default: 0 },
     brand: { type: String, required: true },
     tags: [{ type: String }],
     rating: { type: Number, required: true, default: 0 },
     numReviews: { type: Number, required: true, default: 0 },
     countInStock: { type: Number, required: true, default: 0 },
+    likes: { type: [ObjectId], ref: "User", default: [] },
   },
   {
     timestamps: true,

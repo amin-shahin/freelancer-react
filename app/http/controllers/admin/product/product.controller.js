@@ -1,25 +1,25 @@
-const {
-  addCourseSchema,
-  changeCourseDiscountSchema,
-} = require("../../../validators/admin/course.schema");
 const Controller = require("../../controller");
 const { StatusCodes: HttpStatus } = require("http-status-codes");
 const mongoose = require("mongoose");
 const {
   copyObject,
   deleteInvalidPropertyInObject,
-} = require("../../../../utils/functions");
+} = require("../../../../../utils/functions");
 const createHttpError = require("http-errors");
-const { CommentController } = require("../../comment/comment.controller");
+// const { CommentController } = require("../../comment/comment.controller");
 const ObjectId = mongoose.Types.ObjectId;
 const { CategoryModel } = require("../../../../models/category");
 const { UserModel } = require("../../../../models/user");
 const { ProductModel } = require("../../../../models/product");
+const {
+  addProductSchema,
+  changeCourseDiscountSchema,
+} = require("../../../validators/admin/product.schema");
 
 class ProductController extends Controller {
   async addNewProduct(req, res) {
     // const seller = req.user._id;
-    await addCourseSchema.validateAsync(req.body);
+    await addProductSchema.validateAsync(req.body);
     const {
       title,
       description,
@@ -74,133 +74,97 @@ class ProductController extends Controller {
         $in: categoryIds,
       };
     }
-    if (type) {
-      const types = [type].flat(2);
-      dbQuery["$or"] = [];
-      for (const type of types) {
-        if (type === "off") dbQuery["$or"].push({ discount: { $gt: 0 } });
-        if (type === "free")
-          dbQuery["$or"].push({ type: "free" }, { discount: 100 });
-        if (type === "cash") dbQuery["$or"].push({ type: "cash" });
-        if (type === "completed") dbQuery["$or"].push({ status: "completed" });
-        if (type === "uncompleted")
-          dbQuery["$or"].push({ status: "uncompleted" });
-      }
-    }
+
     const sortQuery = {};
     if (!sort) sortQuery["createdAt"] = 1;
     if (sort) {
       if (sort === "latest") sortQuery["createdAt"] = -1;
       if (sort === "earliest") sortQuery["createdAt"] = 1;
-      if (sort === "popular") sortQuery["numsOfStudents"] = -1;
+      if (sort === "popular") sortQuery["likes"] = -1;
     }
 
-    const courses = await CourseModel.find(dbQuery, {
+    const products = await ProductModel.find(dbQuery, {
       reviews: 0,
-      FAQ: 0,
     })
-      .populate([
-        { path: "category", select: { title: 1, englishTitle: 1 } },
-        { path: "teacher", select: { name: 1, biography: 1 } },
-      ])
+      .populate([{ path: "category", select: { title: 1, englishTitle: 1 } }])
       .sort(sortQuery);
 
-    const transformedCourses = copyObject(courses);
+    const transformedProducts = copyObject(products);
 
-    const newCourses = transformedCourses.map((course) => {
-      course.likesCount = course.likes.length;
-      course.isLiked = false;
-      delete course.chapters;
+    const newProducts = transformedProducts.map((product) => {
+      product.likesCount = product.likes.length;
+      product.isLiked = false;
       if (!user) {
-        course.isLiked = false;
-        delete course.likes;
-        return course;
+        product.isLiked = false;
+        delete product.likes;
+        return product;
       }
-      if (course.likes.includes(user._id.toString())) {
-        course.isLiked = true;
+      if (product.likes.includes(user._id.toString())) {
+        product.isLiked = true;
       }
-      delete course.likes;
-      return course;
+      delete product.likes;
+      return product;
     });
 
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: {
-        message: "همه دوره ها",
-        courses: newCourses,
+        products: newProducts,
       },
     });
   }
-  async getCourseById(req, res) {
-    const { id: courseId } = req.params;
-    const user = req.user;
-
-    const acceptedCommnets = await CommentController.findAcceptedComments(
-      "course",
-      courseId
-    );
-    const { FAQ } = await CourseModel.findOne(
-      { _id: courseId },
-      { FAQ: 1 }
-    ).populate([
-      { path: "FAQ.answer.user", select: { name: 1, biography: 1, avatar: 1 } },
+  async getProductById(req, res) {
+    const { id: productId } = req.params;
+    await this.findProductById(productId);
+    const product = await ProductModel.findById(productId).populate([
+      {
+        path: "category",
+        model: "Category",
+        select: {
+          title: 1,
+          icon: 1,
+          englishTitle: 1,
+        },
+      },
     ]);
-    // const accedptedReviews = await CourseModel.find(
-    //   { _id: courseId, "reviews.status": 2 },
-    //   { "reviews.$": 1 }
-    // ).populate([{ path: "reviews.user", select: { name: 1 } }]);
 
-    // const findedCourse = await CourseModel.findById(courseId).populate([
-    //   { path: "category", select: { title: 1, englishTitle: 1 } },
-    //   { path: "teacher", select: { name: 1, biography: 1 } },
-    // ]);
-    // const course = copyObject(findedCourse);
-    // course.reviews = copyObject(accedptedReviews)[0]?.reviews;
-
-    const course = (await this.getCourseDetail(courseId, user))[0];
-    course.comments = acceptedCommnets;
-    course.commentsCount = acceptedCommnets.length;
-    course.FAQ = FAQ;
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: {
-        course,
+        product,
       },
     });
   }
-  async getOneCourseBySlug(req, res) {
+  async getOneProductBySlug(req, res) {
     const { slug } = req.params;
-    const user = req.user;
-    const _course = await CourseModel.findOne({ slug }, { FAQ: 1 }).populate([
-      { path: "FAQ.answer.user", select: { name: 1, biography: 1, avatar: 1 } },
+    const product = await ProductModel.findOne({ slug }).populate([
+      {
+        path: "category",
+        model: "Category",
+        select: {
+          title: 1,
+          icon: 1,
+          englishTitle: 1,
+        },
+      },
     ]);
 
-    if (!_course)
+    if (!product)
       throw createHttpError.NotFound("دوره ای با این مشخصات یافت نشد");
-    const { id: courseId, FAQ } = _course;
-    const acceptedCommnets = await CommentController.findAcceptedComments(
-      "course",
-      courseId
-    );
-    const course = (await this.getCourseDetail(courseId, user))[0];
-    course.comments = acceptedCommnets;
-    course.commentsCount =
-      acceptedCommnets.length +
-      acceptedCommnets.reduce((a, c) => a + c.answers.length, 0);
-    course.FAQ = FAQ;
+
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: {
-        course,
+        product,
       },
     });
   }
-  async changeCourseDiscountStatus(req, res) {
+  async changeProductDiscountStatus(req, res) {
     const { id } = req.params;
-    await this.findCourseById(id);
+    await this.findProductById(id);
     await changeCourseDiscountSchema.validateAsync(req.body);
     const { discount, offPrice } = req.body;
-    const result = await CourseModel.updateOne(
+    const result = await ProductModel.updateOne(
       { _id: id },
       { $set: { discount, offPrice } }
     );
@@ -208,43 +172,46 @@ class ProductController extends Controller {
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
         data: {
-          message: "وضعیت تخفیف دوره فعال شد",
+          message: "وضعیت تخفیف محصول فعال شد",
         },
       });
     }
     throw createHttpError.BadRequest("تغییر انجام نشد مجددا تلاش کنید");
   }
-  async removeCourse(req, res) {}
-  async updateCourse(req, res) {
+  async removeProduct(req, res) {
     const { id } = req.params;
-    const course = await this.findCourseById(id);
+    await this.findProductById(id);
+    const deleteResult = await ProductModel.deleteOne({ _id: id });
+    if (deleteResult.deletedCount == 0)
+      throw createError.InternalServerError("حدف محصول انجام نشد");
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: {
+        message: "حذف محصول با موفقیت انجام شد",
+      },
+    });
+  }
+  async updateProduct(req, res) {
+    const { id } = req.params;
+    await this.findProductById(id);
     const data = copyObject(req.body);
-    let blackListFields = [
-      "time",
-      "chapters",
-      "episodes",
-      "bookmarks",
-      "likes",
-      "reviews",
-      "teacher",
-      "FAQ",
-    ];
+    let blackListFields = ["bookmarks", "likes", "reviews"];
     deleteInvalidPropertyInObject(data, blackListFields);
-    const updateCourseResult = await CourseModel.updateOne(
+    const updateProductResult = await ProductModel.updateOne(
       { _id: id },
       {
         $set: data,
       }
     );
-    if (!updateCourseResult.modifiedCount)
+    if (!updateProductResult.modifiedCount)
       throw new createHttpError.InternalServerError(
-        "به روزرسانی دوره انجام نشد"
+        "به روزرسانی محصول انجام نشد"
       );
 
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: {
-        message: "به روزرسانی دوره با موفقیت انجام شد",
+        message: "به روزرسانی محصول با موفقیت انجام شد",
       },
     });
   }
@@ -288,12 +255,12 @@ class ProductController extends Controller {
       },
     });
   }
-  async findCourseById(id) {
+  async findProductById(id) {
     if (!mongoose.isValidObjectId(id))
-      throw createHttpError.BadRequest("شناسه دوره ارسال شده صحیح نمیباشد");
-    const course = await CourseModel.findById(id);
-    if (!course) throw createHttpError.NotFound("دوره ای یافت نشد");
-    return course;
+      throw createHttpError.BadRequest("شناسه محصول ارسال شده صحیح نمیباشد");
+    const product = await ProductModel.findById(id);
+    if (!product) throw createHttpError.NotFound("محصولی یافت نشد.");
+    return product;
   }
   async getCourseDetail(courseId, user) {
     // not fetches comments for a course
