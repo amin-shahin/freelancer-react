@@ -4,6 +4,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 const ProductSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
+    description: { type: String, required: true },
     slug: {
       type: String,
       required: true,
@@ -12,13 +13,14 @@ const ProductSchema = new mongoose.Schema(
       lowercase: true,
     },
     category: { type: ObjectId, ref: "Category", required: true },
-    image: { type: String, required: true },
+    imageLink: { type: String, required: true },
     price: { type: Number, required: true },
+    offPrice: { type: Number, required: true },
     brand: { type: String, required: true },
+    tags: [{ type: String }],
     rating: { type: Number, required: true, default: 0 },
     numReviews: { type: Number, required: true, default: 0 },
     countInStock: { type: Number, required: true, default: 0 },
-    description: { type: String, required: true },
   },
   {
     timestamps: true,
