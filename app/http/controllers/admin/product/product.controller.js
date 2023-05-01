@@ -215,36 +215,36 @@ class ProductController extends Controller {
       },
     });
   }
-  async likeCourse(req, res) {
-    const { id: courseId } = req.params;
+  async likeProduct(req, res) {
+    const { id: productId } = req.params;
     const user = req.user;
-    const course = await this.findCourseById(courseId);
-    const likedCourse = await CourseModel.findOne({
-      _id: courseId,
+    const product = await this.findProductById(productId);
+    const likedProduct = await ProductModel.findOne({
+      _id: productId,
       likes: user._id,
     });
-    const updateCourseQuery = likedCourse
+    const updateProductQuery = likedProduct
       ? { $pull: { likes: user._id } }
       : { $push: { likes: user._id } };
 
-    const updateUserQuery = likedCourse
-      ? { $pull: { likedCourses: course._id } }
-      : { $push: { likedCourses: course._id } };
+    const updateUserQuery = likedProduct
+      ? { $pull: { likedProducts: product._id } }
+      : { $push: { likedProducts: product._id } };
 
-    const courseUpdate = await CourseModel.updateOne(
-      { _id: courseId },
-      updateCourseQuery
+    const productUpdate = await ProductModel.updateOne(
+      { _id: productId },
+      updateProductQuery
     );
     const userUpdate = await UserModel.updateOne(
       { _id: user._id },
       updateUserQuery
     );
 
-    if (courseUpdate.modifiedCount === 0 || userUpdate.modifiedCount === 0)
+    if (productUpdate.modifiedCount === 0 || userUpdate.modifiedCount === 0)
       throw createHttpError.BadRequest("عملیات ناموفق بود.");
 
     let message;
-    if (!likedCourse) {
+    if (!likedProduct) {
       message = "مرسی بابت لایک تون";
     } else message = "لایک شما برداشته شد";
 
@@ -261,283 +261,6 @@ class ProductController extends Controller {
     const product = await ProductModel.findById(id);
     if (!product) throw createHttpError.NotFound("محصولی یافت نشد.");
     return product;
-  }
-  async getCourseDetail(courseId, user) {
-    // not fetches comments for a course
-    const course = await CourseModel.aggregate([
-      {
-        $match: {
-          _id: ObjectId(courseId),
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "teacher",
-          foreignField: "_id",
-          as: "teacher",
-          pipeline: [
-            {
-              $project: {
-                name: 1,
-                biography: 1,
-                avatar: 1,
-              },
-            },
-          ],
-        },
-      },
-      {
-        $unwind: {
-          path: "$teacher",
-        },
-      },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "category",
-          foreignField: "_id",
-          as: "category",
-          pipeline: [
-            {
-              $project: {
-                englishTitle: 1,
-                title: 1,
-              },
-            },
-          ],
-        },
-      },
-      {
-        $unwind: {
-          path: "$category",
-        },
-      },
-      {
-        $addFields: {
-          reviews: {
-            $filter: {
-              input: "$reviews",
-              as: "review",
-              cond: {
-                $eq: ["$$review.status", 2],
-              },
-            },
-          },
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "reviews.user",
-          foreignField: "_id",
-          as: "reviewWriter",
-          pipeline: [
-            {
-              $project: {
-                name: 1,
-                biography: 1,
-                avatar: 1,
-              },
-            },
-          ],
-        },
-      },
-      {
-        $addFields: {
-          reviewWriter: {
-            $map: {
-              input: "$reviewWriter",
-              as: "item",
-              in: {
-                $mergeObjects: [
-                  "$$item",
-                  {
-                    avatar: {
-                      $concat: [process.env.SERVER_URL, "/", "$$item.avatar"],
-                    },
-                  },
-                ],
-              },
-            },
-          },
-        },
-      },
-      {
-        $set: {
-          reviews: {
-            $map: {
-              input: "$reviews",
-              as: "item",
-              in: {
-                $mergeObjects: [
-                  "$$item",
-                  {
-                    content: {
-                      text: "$$item.content.text",
-                      audio: {
-                        $concat: [
-                          process.env.SERVER_URL,
-                          "/",
-                          "$$item.content.audio",
-                        ],
-                      },
-                      video: {
-                        $concat: [
-                          process.env.SERVER_URL,
-                          "/",
-                          "$$item.content.video",
-                        ],
-                      },
-                    },
-                  },
-                  {
-                    user: {
-                      $arrayElemAt: [
-                        {
-                          $filter: {
-                            input: "$reviewWriter",
-                            as: "writer",
-                            cond: {
-                              $eq: ["$$writer._id", "$$item.user"],
-                            },
-                          },
-                        },
-                        0,
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          },
-        },
-      },
-      {
-        $set: {
-          reviews: {
-            $function: {
-              body: function (reviews) {
-                reviews.sort((a, b) => {
-                  const aDate = new Date(a.createdAt);
-                  const bDate = new Date(b.createdAt);
-                  return aDate < bDate ? 1 : -1;
-                });
-                return reviews;
-              },
-              args: ["$reviews"],
-              lang: "js",
-            },
-          },
-        },
-      },
-      {
-        $addFields: {
-          totalTime: {
-            $function: {
-              body: function (chapters) {
-                let time = 0;
-                for (const chapter of chapters) {
-                  if (Array.isArray(chapter.episodes)) {
-                    for (const episode of chapter.episodes) {
-                      if (episode.time) time += parseInt(episode.time);
-                    }
-                  }
-                }
-                const seconds = time * 60;
-                h = Math.floor(seconds / 3600); //convert second to hour
-                m = Math.floor((seconds % 3600) / 60); //convert second to mintutes
-                s = Math.floor((seconds % 3600) % 60); //convert seconds to second
-                if (String(h).length == 1) h = `0${h}`;
-                if (String(m).length == 1) m = `0${m}`;
-                if (String(s).length == 1) s = `0${s}`;
-                return h + ":" + m + ":" + s;
-              },
-              args: ["$chapters"],
-              lang: "js",
-            },
-          },
-        },
-      },
-      {
-        $addFields: {
-          totalEpisodes: {
-            $function: {
-              body: function (chapters) {
-                let totalEpisodes = 0;
-                for (const chapter of chapters) {
-                  totalEpisodes += Number(chapter.episodes.length);
-                }
-                return totalEpisodes;
-              },
-              args: ["$chapters"],
-              lang: "js",
-            },
-          },
-        },
-      },
-      {
-        $addFields: {
-          chapters: {
-            $function: {
-              body: function chapters(id, chapters, user) {
-                if (user && user.role === "ADMIN") return chapters;
-
-                if (user && user.enrolledCourses.some((c) => c.equals(id)))
-                  return chapters;
-
-                // transfor chapters : delete episodes with lock type
-                for (const chapter of chapters) {
-                  for (const episode of chapter.episodes) {
-                    if (episode.type === "lock") delete episode.link;
-                  }
-                }
-                return chapters;
-              },
-              args: ["$_id", "$chapters", user],
-              lang: "js",
-            },
-          },
-        },
-      },
-      {
-        $addFields: {
-          likesCount: {
-            $size: "$likes",
-          },
-        },
-      },
-      {
-        $addFields: {
-          isLiked: {
-            $function: {
-              body: function (likes, user) {
-                if (!user) return false;
-                if (likes.some((c) => c.equals(user._id))) {
-                  return true;
-                }
-                return false;
-              },
-              args: ["$likes", user],
-              lang: "js",
-            },
-          },
-        },
-      },
-      // {
-      //   $addFields: {
-      //     introVideoUrl: {
-      //       $concat: [process.env.SERVER_URL, "/", "$introVideo"],
-      //     },
-      //   },
-      // },
-      {
-        $unset: ["reviewWriter", "FAQ", "likes"],
-      },
-    ]);
-    if (!course)
-      throw createHttpError.BadRequest("دوره ای با این مشخصات یافت نشد.");
-    return copyObject(course);
   }
 }
 
