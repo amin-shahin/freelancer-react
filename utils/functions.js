@@ -2,6 +2,8 @@ const createError = require("http-errors");
 const JWT = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const { UserModel } = require("../app/models/user");
+const mongoose = require("mongoose");
+
 function generateRandomNumber(length) {
   if (length === 5) {
     return Math.floor(10000 + Math.random() * 90000);
@@ -294,6 +296,14 @@ function deleteInvalidPropertyInObject(data = {}, blackListFields = []) {
     if (nullishData.includes(data[key])) delete data[key];
   });
 }
+async function checkProductExist(id) {
+  const { ProductModel } = require("../app/models/product");
+  if (!mongoose.isValidObjectId(id))
+    throw createError.BadRequest("شناسه محصول ارسال شده صحیح نمیباشد");
+  const product = await ProductModel.findById(id);
+  if (!product) throw createError.NotFound("محصولی یافت نشد");
+  return product;
+}
 
 module.exports = {
   generateRandomNumber,
@@ -304,4 +314,5 @@ module.exports = {
   getUserCartDetail,
   copyObject,
   deleteInvalidPropertyInObject,
+  checkProductExist,
 };

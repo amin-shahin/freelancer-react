@@ -2,8 +2,12 @@ const createHttpError = require("http-errors");
 const { ProductModel } = require("../../../models/product");
 const Controller = require("../controller");
 const { StatusCodes: HttpStatus } = require("http-status-codes");
-const { copyObject } = require("../../../../utils/functions");
+const {
+  copyObject,
+  getUserCartDetail,
+} = require("../../../../utils/functions");
 const { UserModel } = require("../../../models/user");
+const { CouponModel } = require("../../../models/coupon");
 
 class CartController extends Controller {
   async addToCart(req, res) {
@@ -132,12 +136,15 @@ class CartController extends Controller {
       throw createHttpError.BadRequest("کد تخفیف منقضی شده است");
     if (!coupon.isActive)
       throw createHttpError.BadRequest("کد تخفیف فعال نیست");
-    const isCouponIncludeCartItems = coupon.courseIds.some((courseId) =>
-      user.cart.courseIds.includes(courseId)
+    const productIdsInCart = user.cart.products.map((p) =>
+      p.productId.valueOf()
+    );
+    const isCouponIncludeCartItems = coupon.productIds.some((pId) =>
+      productIdsInCart.includes(pId.valueOf())
     );
     if (!isCouponIncludeCartItems)
       throw createHttpError.BadRequest(
-        "کد تخفیف مختص هیچ کدام از این دوره ها نمی باشد."
+        "کد تخفیف مختص هیچ کدام از این محصولات نمی باشد."
       );
     const addCouponToCart = await UserModel.updateOne(
       { _id: user._id },
@@ -147,6 +154,7 @@ class CartController extends Controller {
     );
     if (addCouponToCart.modifiedCount == 0)
       throw new createHttpError.InternalServerError("کد تخفیف اعمال نشد");
+
     const userCartDetail = (await getUserCartDetail(user._id))?.[0];
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
@@ -166,7 +174,7 @@ class CartController extends Controller {
       }
     );
     if (removeCouponFromCart.modifiedCount == 0)
-      throw new createHttpError.InternalServerError("کد تخفیف حذف نشد");
+      throw createHttpError.InternalServerError("کد تخفیف حذف نشد");
     const userCartDetail = (await getUserCartDetail(userId))?.[0];
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,

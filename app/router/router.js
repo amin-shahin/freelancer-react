@@ -11,7 +11,7 @@ router.use("/user", userAuthRoutes);
 router.use("/category", categoryRoutes);
 router.use("/product", productRoutes);
 router.use("/cart", verifyAccessToken, cartRoutes);
-router.use("/admin", adminRoutes);
+router.use("/admin", verifyAccessToken, adminRoutes);
 
 module.exports = {
   allRoutes: router,
