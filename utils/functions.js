@@ -3,6 +3,12 @@ const JWT = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const { UserModel } = require("../app/models/user");
 const mongoose = require("mongoose");
+const moment = require("moment-jalali");
+const crypto = require("crypto");
+
+function secretKeyGenerator() {
+  return crypto.randomBytes(32).toString("hex").toUpperCase();
+}
 
 function generateRandomNumber(length) {
   if (length === 5) {
@@ -305,6 +311,13 @@ async function checkProductExist(id) {
   return product;
 }
 
+function invoiceNumberGenerator() {
+  return (
+    moment().format("jYYYYjMMjDDHHmmssSSS") +
+    String(process.hrtime()[1]).padStart(9, 0)
+  );
+}
+
 module.exports = {
   generateRandomNumber,
   toPersianDigits,
@@ -315,4 +328,6 @@ module.exports = {
   copyObject,
   deleteInvalidPropertyInObject,
   checkProductExist,
+  invoiceNumberGenerator,
+  secretKeyGenerator,
 };

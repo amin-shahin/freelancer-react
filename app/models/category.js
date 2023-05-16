@@ -8,7 +8,7 @@ const CategorySchema = new mongoose.Schema(
     description: { type: String, required: true, trim: true, lowercase: true },
     type: {
       type: String,
-      enum: ["product", "comment"],
+      enum: ["product", "comment", "post","ticket"],
       default: "product",
       required: true,
     },

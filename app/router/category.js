@@ -10,6 +10,7 @@ router.get(
   expressAsyncHandler(CategoryController.getListOfCategories)
 );
 
+router.get("/:id", expressAsyncHandler(CategoryController.getCategoryById));
 module.exports = {
   categoryRoutes: router,
 };

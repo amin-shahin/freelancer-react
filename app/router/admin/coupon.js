@@ -11,6 +11,7 @@ router.delete(
 );
 router.patch("/update/:id", expressAsyncHandler(CouponController.updateCoupon));
 router.get("/list", expressAsyncHandler(CouponController.getAllCoupons));
+router.get("/:id", expressAsyncHandler(CouponController.getOneCoupon));
 
 module.exports = {
   couponAdminRoutes: router,

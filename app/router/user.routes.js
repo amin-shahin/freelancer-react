@@ -17,7 +17,7 @@ router.get(
   "/refresh-token",
   expressAsyncHandler(UserAuthController.refreshToken)
 );
-router.post(
+router.patch(
   "/update",
   verifyAccessToken,
   expressAsyncHandler(UserAuthController.updateProfile)

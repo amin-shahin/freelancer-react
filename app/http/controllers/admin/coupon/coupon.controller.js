@@ -94,6 +94,23 @@ class CouponController extends Controller {
       },
     });
   }
+  async getOneCoupon(req, res) {
+    const { id } = req.params;
+    const coupon = await CouponModel.findOne({ _id: id }).populate([
+      {
+        path: "productIds",
+        model: "Product",
+        select: { title: 1, slug: 1 },
+      },
+    ]);
+    if (!coupon) throw createHttpError.InternalServerError("کد تخفیف پیدا نشد");
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: {
+        coupon,
+      },
+    });
+  }
   async findCouponById(id) {
     const coupon = await CouponModel.findById(id);
     if (!coupon)

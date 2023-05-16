@@ -87,6 +87,16 @@ class CategoryController extends Controller {
       },
     });
   }
+  async getCategoryById(req, res) {
+    const { id } = req.params;
+    const category = await this.checkExistCategory(id);
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: {
+        category,
+      },
+    });
+  }
 }
 
 module.exports = {

@@ -19,6 +19,7 @@ const {
   completeProfileSchema,
   updateProfileSchema,
 } = require("../../validators/user/user.schema");
+const { PaymentModel } = require("../../../models/payment");
 
 class userAuthController extends Controller {
   constructor() {
@@ -193,12 +194,12 @@ class userAuthController extends Controller {
   async updateProfile(req, res) {
     const { _id: userId } = req.user;
     await updateProfileSchema.validateAsync(req.body);
-    const { name, email, biography } = req.body;
+    const { name, email, biography, phoneNumber } = req.body;
 
     const updateResult = await UserModel.updateOne(
       { _id: userId },
       {
-        $set: { name, email, biography },
+        $set: { name, email, biography, phoneNumber },
       }
     );
     if (!updateResult.modifiedCount === 0)
@@ -226,17 +227,13 @@ class userAuthController extends Controller {
     const { _id: userId } = req.user;
     const user = await UserModel.findById(userId, { otp: 0 });
     const cart = (await getUserCartDetail(userId))?.[0];
-    // const userDetail = (await getUserDetail(userId))?.[0];
-
-    // const payments = userDetail?.payments;
-    // const products = userDetail?.userProducts;
+    const payments = await PaymentModel.find({ user: userId });
 
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: {
         user,
-        // payments,
-        // products,
+        payments,
         cart,
       },
     });

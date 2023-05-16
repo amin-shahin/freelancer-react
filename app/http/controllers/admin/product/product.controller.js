@@ -64,7 +64,7 @@ class ProductController extends Controller {
     // console.log({ category, sort, type });
     if (search) dbQuery["$text"] = { $search: search };
     if (category) {
-      const categories = [category].flat(2);
+      const categories = category.split(",");
       const categoryIds = [];
       for (const item of categories) {
         const { _id } = await CategoryModel.findOne({ englishTitle: item });
@@ -105,7 +105,6 @@ class ProductController extends Controller {
       delete product.likes;
       return product;
     });
-
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: {
