@@ -6,6 +6,7 @@ const {
 const router = require("express").Router();
 
 router.get("/list", expressAsyncHandler(UserController.getAllUsers));
+router.patch("/verify/:userId", expressAsyncHandler(UserController.verifyUser));
 router.get("/profile/:userId", expressAsyncHandler(UserController.userProfile));
 
 module.exports = {

@@ -51,26 +51,6 @@ class userAuthController extends Controller {
       { phoneNumber },
       { password: 0, refreshToken: 0, accessToken: 0 }
     );
-    // .populate([
-    //   {
-    //     path: "Products",
-    //     model: "Product",
-    //     select: {
-    //       title: 1,
-    //       slug: 1,
-    //       price: 1,
-    //       icon: 1,
-    //     },
-    //     populate: [
-    //       {
-    //         // deeper
-    //         path: "seller",
-    //         model: "Seller",
-    //         select: { name: 1, icon: 1 },
-    //       },
-    //     ],
-    //   },
-    // ]);
 
     if (!user) throw createError.NotFound("کاربری با این مشخصات یافت نشد");
 
@@ -110,7 +90,7 @@ class userAuthController extends Controller {
     return await UserModel.create({
       phoneNumber,
       otp,
-      role: ROLES.USER,
+      // role: ROLES.USER,
     });
   }
   async checkUserExist(phoneNumber) {
@@ -162,7 +142,7 @@ class userAuthController extends Controller {
   async completeProfile(req, res) {
     await completeProfileSchema.validateAsync(req.body);
     const { user } = req;
-    const { name, email } = req.body;
+    const { name, email, role } = req.body;
 
     if (!user.isVerifiedPhoneNumber)
       throw createError.Forbidden("شماره موبایل خود را تایید کنید.");
@@ -176,7 +156,7 @@ class userAuthController extends Controller {
 
     const updatedUser = await UserModel.findOneAndUpdate(
       { _id: user._id },
-      { $set: { name, email, isActive: true } },
+      { $set: { name, email, isActive: true, role } },
       { new: true }
     );
     // await setAuthCookie(res, updatedUser);

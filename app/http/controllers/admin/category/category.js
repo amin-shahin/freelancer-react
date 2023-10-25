@@ -22,6 +22,7 @@ class CategoryController extends Controller {
     });
   }
   async addNewCategory(req, res) {
+    console.log(req.body);
     const { title, englishTitle, description, type, parent } =
       await addCategorySchema.validateAsync(req.body);
     await this.findCategoryWithTitle(englishTitle);

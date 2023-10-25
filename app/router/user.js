@@ -23,12 +23,6 @@ router.patch(
   expressAsyncHandler(UserAuthController.updateProfile)
 );
 
-// router.post(
-//   "/upload-avatar",
-//   verifyAccessToken,
-//   uploadFile.single("avatar"),
-//   expressAsyncHandler(UserAuthController.updateAvatar)
-// );
 router.get(
   "/profile",
   verifyAccessToken,

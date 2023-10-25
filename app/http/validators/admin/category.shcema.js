@@ -24,7 +24,7 @@ const addCategorySchema = Joi.object({
     .required()
     .min(3)
     .max(100)
-    .valid("product", "post", "comment", "ticket")
+    .valid("project", "post", "comment", "ticket")
     .error(createHttpError.BadRequest("نوع دسته بندی صحیح نمی باشد")),
   parent: Joi.string()
     .allow("")

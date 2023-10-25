@@ -1,22 +1,11 @@
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
-const ProductSchema = new mongoose.Schema({
-  quantity: { type: Number, default: 1 },
-  productId: { type: ObjectId, ref: "Product" },
-});
-
-const CartSchema = new mongoose.Schema({
-  products: { type: [ProductSchema], default: [] },
-  coupon: { type: ObjectId, ref: "Coupon", default: null },
-});
-
 const UserSchema = new mongoose.Schema(
   {
     name: { type: String, trim: true },
     avatar: { type: String },
     biography: { type: String, default: null },
-    likedProducts: [{ type: ObjectId, ref: "Product" }],
     email: { type: String, lowercase: true, trim: true },
     phoneNumber: { type: String, trim: true },
     password: { type: String },
@@ -27,10 +16,8 @@ const UserSchema = new mongoose.Schema(
     resetLink: { type: String, default: null },
     isVerifiedPhoneNumber: { type: Boolean, default: false },
     isActive: { type: Boolean, default: false },
-    Products: [{ type: ObjectId, ref: "Product" }],
+    status: { type: Number, required: true, default: 1, enum: [0, 1, 2] }, // 0, 1, 2
     role: { type: String, default: "USER" },
-    cart: { type: CartSchema },
-    likedProducts: [{ type: ObjectId, ref: "Product" }],
   },
   {
     timestamps: true,

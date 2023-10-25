@@ -10,13 +10,13 @@ const createHttpError = require("http-errors");
 const ObjectId = mongoose.Types.ObjectId;
 const { CategoryModel } = require("../../../../models/category");
 const { UserModel } = require("../../../../models/user");
-const { ProductModel } = require("../../../../models/product");
 const {
   addProductSchema,
   changeCourseDiscountSchema,
 } = require("../../../validators/admin/product.schema");
+const { ProjectModel } = require("../../../models/project");
 
-class ProductController extends Controller {
+class ProjectController extends Controller {
   async addNewProduct(req, res) {
     // const seller = req.user._id;
     await addProductSchema.validateAsync(req.body);
@@ -61,7 +61,7 @@ class ProductController extends Controller {
     let dbQuery = {};
     const user = req.user;
     const { search, category, sort, type } = req.query;
-    // console.log({ category, sort, type });
+
     if (search) dbQuery["$text"] = { $search: search };
     if (category) {
       const categories = category.split(",");
@@ -83,32 +83,14 @@ class ProductController extends Controller {
       if (sort === "popular") sortQuery["likes"] = -1;
     }
 
-    const products = await ProductModel.find(dbQuery, {
-      reviews: 0,
-    })
+    const projects = await ProjectModel.find(dbQuery, {})
       .populate([{ path: "category", select: { title: 1, englishTitle: 1 } }])
       .sort(sortQuery);
 
-    const transformedProducts = copyObject(products);
-
-    const newProducts = transformedProducts.map((product) => {
-      product.likesCount = product.likes.length;
-      product.isLiked = false;
-      if (!user) {
-        product.isLiked = false;
-        delete product.likes;
-        return product;
-      }
-      if (product.likes.includes(user._id.toString())) {
-        product.isLiked = true;
-      }
-      delete product.likes;
-      return product;
-    });
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: {
-        products: newProducts,
+        projects,
       },
     });
   }
@@ -264,5 +246,5 @@ class ProductController extends Controller {
 }
 
 module.exports = {
-  ProductController: new ProductController(),
+  ProjectController: new ProjectController(),
 };

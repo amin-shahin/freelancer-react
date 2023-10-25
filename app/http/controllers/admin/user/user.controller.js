@@ -1,8 +1,11 @@
+const createHttpError = require("http-errors");
 const { getUserCartDetail } = require("../../../../../utils/functions");
 const { PaymentModel } = require("../../../../models/payment");
 const { UserModel } = require("../../../../models/user");
 const Controller = require("../../controller");
 const { StatusCodes: HttpStatus } = require("http-status-codes");
+const { ProjectModel } = require("../../../../models/project");
+const { ProposalModel } = require("../../../../models/proposal");
 
 class UserController extends Controller {
   // ADMIN ROUTES :
@@ -22,12 +25,6 @@ class UserController extends Controller {
         { phoneNumber: searchTerm },
       ],
     })
-      .populate([
-        {
-          path: "Products",
-          model: "Product",
-        },
-      ])
       .limit(limit)
       .skip(skip)
       .sort({
@@ -43,15 +40,40 @@ class UserController extends Controller {
   async userProfile(req, res) {
     const { userId } = req.params;
     const user = await UserModel.findById(userId, { otp: 0 });
-    const cart = (await getUserCartDetail(userId))?.[0];
-    const payments = await PaymentModel.find({ user: userId });
+    const createdProjects = await ProjectModel.find({ owner: userId });
+    const completedProjects = await ProjectModel.find({ freelancer: userId });
+    const proposals = await ProposalModel.find({ user: userId });
 
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: {
         user,
-        payments,
-        cart,
+        createdProjects,
+        completedProjects,
+        proposals,
+      },
+    });
+  }
+  async verifyUser(req, res) {
+    const { userId } = req.params;
+    const { status } = req.body;
+    const updateResult = await UserModel.updateOne(
+      { _id: userId },
+      { $set: { status } }
+    );
+
+    if (updateResult.modifiedCount === 0)
+      throw createHttpError.InternalServerError(" وضعیت کاربر آپدیت نشد");
+
+    let message = "وضعیت کاربر تایید شد";
+    if (status === 0) message = "وضعیت کاربر به حالت رد شده تغییر یافت";
+    if (status === 1)
+      message = "وضعیت کاربر به حالت در انتظار تایید تغییر یافت";
+
+    return res.status(HttpStatus.OK).json({
+      statusCode: HttpStatus.OK,
+      data: {
+        message,
       },
     });
   }
