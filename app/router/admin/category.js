@@ -2,7 +2,7 @@ const router = require("express").Router();
 const expressAsyncHandler = require("express-async-handler");
 const {
   CategoryController,
-} = require("../../http/controllers/admin/category/category");
+} = require("../../http/controllers/category.controller");
 
 router.post("/add", expressAsyncHandler(CategoryController.addNewCategory));
 router.patch(

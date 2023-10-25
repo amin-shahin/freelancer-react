@@ -1,11 +1,11 @@
 const createHttpError = require("http-errors");
-const { getUserCartDetail } = require("../../../../../utils/functions");
-const { PaymentModel } = require("../../../../models/payment");
-const { UserModel } = require("../../../../models/user");
-const Controller = require("../../controller");
+const { getUserCartDetail } = require("../../../../utils/functions");
+const { PaymentModel } = require("../../../models/payment");
+const { UserModel } = require("../../../models/user");
+const Controller = require("../controller");
 const { StatusCodes: HttpStatus } = require("http-status-codes");
-const { ProjectModel } = require("../../../../models/project");
-const { ProposalModel } = require("../../../../models/proposal");
+const { ProjectModel } = require("../../../models/project");
+const { ProposalModel } = require("../../../models/proposal");
 
 class UserController extends Controller {
   // ADMIN ROUTES :

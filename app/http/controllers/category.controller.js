@@ -1,11 +1,11 @@
-const Controller = require("../../controller");
+const Controller = require("./controller");
 const { StatusCodes: HttpStatus } = require("http-status-codes");
 const createHttpError = require("http-errors");
 const {
   addCategorySchema,
   updateCategorySchema,
-} = require("../../../validators/admin/category.shcema");
-const { CategoryModel } = require("../../../../models/category");
+} = require("../validators/admin/category.shcema");
+const { CategoryModel } = require("../../models/category");
 
 class CategoryController extends Controller {
   async getListOfCategories(req, res) {

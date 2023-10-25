@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const {
   CategoryController,
-} = require("../http/controllers/admin/category/category");
+} = require("../http/controllers/category.controller");
 
 const router = require("express").Router();
 

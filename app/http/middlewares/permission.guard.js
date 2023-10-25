@@ -1,9 +1,7 @@
 const createError = require("http-errors");
 const { UserModel } = require("../../models/user");
-const { allRoutes } = require("../../router/router");
 
 function authorize(...allowedRoles) {
-  console.log(allRoutes);
   return async function (req, res, next) {
     try {
       const userId = req.user._id;

@@ -1,4 +1,4 @@
-const Controller = require("../controller");
+const Controller = require("./controller");
 const {
   generateRandomNumber,
   toPersianDigits,
@@ -6,20 +6,20 @@ const {
   setRefreshToken,
   verifyRefreshToken,
   getUserCartDetail,
-} = require("../../../../utils/functions");
+} = require("../../../utils/functions");
 const createError = require("http-errors");
-const { UserModel } = require("../../../models/user");
+const { UserModel } = require("../../models/user");
 const Kavenegar = require("kavenegar");
 const CODE_EXPIRES = 90 * 1000; //90 seconds in miliseconds
 const { StatusCodes: HttpStatus } = require("http-status-codes");
 const path = require("path");
-const { ROLES } = require("../../../../utils/constants");
+const { ROLES } = require("../../../utils/constants");
 const {
   checkOtpSchema,
   completeProfileSchema,
   updateProfileSchema,
-} = require("../../validators/user/user.schema");
-const { PaymentModel } = require("../../../models/payment");
+} = require("../validators/user/user.schema");
+const { PaymentModel } = require("../../models/payment");
 
 class userAuthController extends Controller {
   constructor() {

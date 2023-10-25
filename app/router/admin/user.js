@@ -1,7 +1,7 @@
 const expressAsyncHandler = require("express-async-handler");
 const {
   UserController,
-} = require("../../http/controllers/admin/user/user.controller");
+} = require("../../http/controllers/admin/user.controller");
 
 const router = require("express").Router();
 
