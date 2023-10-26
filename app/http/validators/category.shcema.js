@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const createHttpError = require("http-errors");
-const { MongoIDPattern } = require("../../../../utils/constants");
+const { MongoIDPattern } = require("../../../utils/constants");
 
 const addCategorySchema = Joi.object({
   title: Joi.string()

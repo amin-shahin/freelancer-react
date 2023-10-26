@@ -12,14 +12,11 @@ const { UserModel } = require("../../models/user");
 const Kavenegar = require("kavenegar");
 const CODE_EXPIRES = 90 * 1000; //90 seconds in miliseconds
 const { StatusCodes: HttpStatus } = require("http-status-codes");
-const path = require("path");
-const { ROLES } = require("../../../utils/constants");
 const {
-  checkOtpSchema,
   completeProfileSchema,
   updateProfileSchema,
-} = require("../validators/user/user.schema");
-const { PaymentModel } = require("../../models/payment");
+  checkOtpSchema,
+} = require("../validators/user.schema");
 
 class userAuthController extends Controller {
   constructor() {

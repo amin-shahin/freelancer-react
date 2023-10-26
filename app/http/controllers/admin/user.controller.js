@@ -1,6 +1,4 @@
 const createHttpError = require("http-errors");
-const { getUserCartDetail } = require("../../../../utils/functions");
-const { PaymentModel } = require("../../../models/payment");
 const { UserModel } = require("../../../models/user");
 const Controller = require("../controller");
 const { StatusCodes: HttpStatus } = require("http-status-codes");

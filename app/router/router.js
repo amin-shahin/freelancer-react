@@ -5,7 +5,7 @@ const { adminRoutes } = require("./admin/admin.routes");
 const { categoryRoutes } = require("./category");
 const { projectRoutes } = require("./project");
 const { proposalRoutes } = require("./proposal");
-const { userAuthRoutes } = require("./user");
+const { userAuthRoutes } = require("./userAuth");
 
 const router = require("express").Router();
 
