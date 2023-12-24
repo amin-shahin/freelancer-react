@@ -5,7 +5,6 @@ const {
   setAccessToken,
   setRefreshToken,
   verifyRefreshToken,
-  getUserCartDetail,
 } = require("../../../utils/functions");
 const createError = require("http-errors");
 const { UserModel } = require("../../models/user");
@@ -145,7 +144,7 @@ class userAuthController extends Controller {
       throw createError.Forbidden("شماره موبایل خود را تایید کنید.");
 
     const duplicateUser = await UserModel.findOne({ email });
-
+    console.log(duplicateUser);
     if (duplicateUser)
       throw createError.BadRequest(
         "کاربری با این ایمیل قبلا ثبت نام کرده است."
@@ -203,15 +202,11 @@ class userAuthController extends Controller {
   async getUserProfile(req, res) {
     const { _id: userId } = req.user;
     const user = await UserModel.findById(userId, { otp: 0 });
-    const cart = (await getUserCartDetail(userId))?.[0];
-    const payments = await PaymentModel.find({ user: userId });
 
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
       data: {
         user,
-        payments,
-        cart,
       },
     });
   }

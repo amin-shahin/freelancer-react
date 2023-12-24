@@ -6,6 +6,7 @@ const { ProposalModel } = require("../../models/proposal");
 const { addProposalSchema } = require("../validators/proposal.schema");
 const { ProjectModel } = require("../../models/project");
 const { copyObject } = require("../../../utils/functions");
+const { ROLES } = require("../../../utils/constants");
 
 class ProposalController extends Controller {
   async addNewProposal(req, res) {
@@ -37,14 +38,20 @@ class ProposalController extends Controller {
     let dbQuery = {};
     const { sort } = req.query;
 
+    const user = req.user;
+    if (user.role !== ROLES.ADMIN) {
+      dbQuery["user"] = user._id;
+    }
+
     const sortQuery = {};
+
     if (!sort) sortQuery["createdAt"] = 1;
     if (sort) {
       if (sort === "latest") sortQuery["createdAt"] = -1;
       if (sort === "earliest") sortQuery["createdAt"] = 1;
     }
 
-    const proposals = await ProposalModel.find(dbQuery, {}).sort(sortQuery);
+    const proposals = await ProposalModel.find(dbQuery).sort(sortQuery);
 
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,
@@ -71,10 +78,9 @@ class ProposalController extends Controller {
     return proposal;
   }
   async changeProposalStatus(req, res) {
-    const ownerId = req.user._id;
     const { id } = req.params;
-    const { status } = req.body;
-
+    let { status, projectId } = req.body;
+    status = Number(status);
     const proposal = await ProposalModel.findOneAndUpdate(
       { _id: id },
       { $set: { status } } // 0, 1, 2
@@ -83,7 +89,7 @@ class ProposalController extends Controller {
     let freelancer = copyObject(proposal).user;
     if (status !== 2) freelancer = null;
 
-    await ProjectModel.updateOne({ owner: ownerId }, { $set: { freelancer } });
+    await ProjectModel.updateOne({ _id: projectId }, { $set: { freelancer } });
 
     if (!proposal)
       throw createHttpError.InternalServerError(" وضعیت پروپوزال آپدیت نشد");

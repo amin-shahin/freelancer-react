@@ -3,7 +3,6 @@ const createHttpError = require("http-errors");
 const JWT = require("jsonwebtoken");
 const { UserModel } = require("../../models/user");
 
-
 async function verifyAccessToken(req, res, next) {
   try {
     const accessToken = req.signedCookies["accessToken"];
@@ -38,6 +37,22 @@ async function verifyAccessToken(req, res, next) {
   }
 }
 
+async function isVerifiedUser(req, res, next) {
+  try {
+    const user = req.user;
+    if (user.status === 1) {
+      throw createHttpError.Forbidden("پروفایل شما در انتظار بررسی است.");
+    }
+    if (user.status !== 2) {
+      throw createHttpError.Forbidden(
+        "پروفایل شما مورد تایید قرار نگرفته است."
+      );
+    }
+    return next();
+  } catch (error) {
+    next(error);
+  }
+}
 
 function decideAuthMiddleware(req, res, next) {
   const accessToken = req.signedCookies["accessToken"];
@@ -51,4 +66,5 @@ function decideAuthMiddleware(req, res, next) {
 module.exports = {
   verifyAccessToken,
   decideAuthMiddleware,
+  isVerifiedUser,
 };
