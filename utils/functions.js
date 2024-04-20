@@ -31,8 +31,8 @@ async function setAccessToken(res, user) {
     signed: true, // Indicates if the cookie should be signed
     sameSite: "Lax",
     secure: process.env.NODE_ENV === "development" ? false : true,
-    domain:
-      process.env.NODE_ENV === "development" ? "localhost" : ".fronthooks.ir",
+    domain: process.env.DOMAIN,
+    // domain:process.env.NODE_ENV === "development" ? "localhost" : ".fronthooks.ir",
   };
   res.cookie(
     "accessToken",
@@ -48,8 +48,9 @@ async function setRefreshToken(res, user) {
     signed: true, // Indicates if the cookie should be signed
     sameSite: "Lax",
     secure: process.env.NODE_ENV === "development" ? false : true,
-    domain:
-      process.env.NODE_ENV === "development" ? "localhost" : ".fronthooks.ir",
+    domain: process.env.DOMAIN,
+    // domain:
+    //   process.env.NODE_ENV === "development" ? "localhost" : ".folan.ir",
   };
   res.cookie(
     "refreshToken",
