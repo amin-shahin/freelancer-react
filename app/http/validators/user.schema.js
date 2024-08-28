@@ -30,7 +30,7 @@ const completeProfileSchema = Joi.object({
   role: Joi.string()
     .required()
     .valid("FREELANCER", "OWNER")
-    .error(createHttpError.BadRequest("ایمیل وارد شده صحیح نمی باشد")),
+    .error(createHttpError.BadRequest("نقش وارد شده صحیح نمی باشد")),
 });
 
 const updateProfileSchema = Joi.object({

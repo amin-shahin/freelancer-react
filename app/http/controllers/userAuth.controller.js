@@ -115,6 +115,7 @@ class userAuthController extends Controller {
         template: "registerVerify",
       },
       (response, status) => {
+        console.log(response);
         console.log("kavenegar message status", status);
         if (response && status === 200)
           return res.status(HttpStatus.OK).send({
@@ -219,8 +220,7 @@ class userAuthController extends Controller {
       sameSite: "Lax",
       secure: true,
       path: "/",
-      domain:
-        process.env.NODE_ENV === "development" ? "localhost" : ".fronthooks.ir",
+      domain: process.env.NODE_ENV === process.env.DOMAIN,
     };
     res.cookie("accessToken", null, cookieOptions);
     res.cookie("refreshToken", null, cookieOptions);

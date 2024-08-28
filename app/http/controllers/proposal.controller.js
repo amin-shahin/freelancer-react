@@ -81,18 +81,26 @@ class ProposalController extends Controller {
     const { id } = req.params;
     let { status, projectId } = req.body;
     status = Number(status);
+
     const proposal = await ProposalModel.findOneAndUpdate(
       { _id: id },
       { $set: { status } } // 0, 1, 2
     );
-
-    let freelancer = copyObject(proposal).user;
-    if (status !== 2) freelancer = null;
-
-    await ProjectModel.updateOne({ _id: projectId }, { $set: { freelancer } });
-
     if (!proposal)
       throw createHttpError.InternalServerError(" وضعیت پروپوزال آپدیت نشد");
+
+    const project = await ProjectModel.findOne({
+      proposals: { $in: [proposal._id] },
+    });
+
+    let freelancer = copyObject(proposal).user;
+
+    if (status !== 2) freelancer = null;
+
+    await ProjectModel.updateOne(
+      { _id: project._id },
+      { $set: { freelancer } }
+    );
 
     let message = "وضعیت پروپوزال تایید شد";
     if (status === 0) message = "وضعیت پروپوزال به حالت رد شده تغییر یافت";
