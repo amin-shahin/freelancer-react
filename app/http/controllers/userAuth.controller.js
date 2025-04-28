@@ -37,7 +37,19 @@ class userAuthController extends Controller {
     if (!result) throw createError.Unauthorized("ورود شما انجام نشد.");
 
     // send OTP
-    this.sendOTP(phoneNumber, res);
+
+    if (process.env.IS_TESTING_MODE_OTP) {
+      return res.status(HttpStatus.OK).send({
+        statusCode: HttpStatus.OK,
+        data: {
+          message: `کد تائید برای ورود تستی: ${this.code}`,
+          expiresIn: CODE_EXPIRES,
+          phoneNumber,
+        },
+      });
+    } else {
+      this.sendOTP(phoneNumber, res);
+    }
   }
   async checkOtp(req, res) {
     await checkOtpSchema.validateAsync(req.body);
@@ -115,8 +127,8 @@ class userAuthController extends Controller {
         template: "registerVerify",
       },
       (response, status) => {
-        console.log(response);
-        console.log("kavenegar message status", status);
+        // console.log(response);
+        // console.log("kavenegar message status", status);
         if (response && status === 200)
           return res.status(HttpStatus.OK).send({
             statusCode: HttpStatus.OK,
@@ -220,7 +232,7 @@ class userAuthController extends Controller {
       sameSite: "Lax",
       secure: true,
       path: "/",
-      domain: process.env.NODE_ENV === process.env.DOMAIN,
+      domain: process.env.DOMAIN,
     };
     res.cookie("accessToken", null, cookieOptions);
     res.cookie("refreshToken", null, cookieOptions);

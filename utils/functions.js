@@ -32,7 +32,6 @@ async function setAccessToken(res, user) {
     sameSite: "Lax",
     secure: process.env.NODE_ENV === "development" ? false : true,
     domain: process.env.DOMAIN,
-    // domain:process.env.NODE_ENV === "development" ? "localhost" : ".fronthooks.ir",
   };
   res.cookie(
     "accessToken",
@@ -49,8 +48,6 @@ async function setRefreshToken(res, user) {
     sameSite: "Lax",
     secure: process.env.NODE_ENV === "development" ? false : true,
     domain: process.env.DOMAIN,
-    // domain:
-    //   process.env.NODE_ENV === "development" ? "localhost" : ".folan.ir",
   };
   res.cookie(
     "refreshToken",
