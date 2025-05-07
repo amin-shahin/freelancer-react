@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import Auth from "./pages/Auth";
+import { Routes, Route } from "react-router";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,8 +24,10 @@ function App() {
   }, []);
 
   return (
-    <div className="  font-vazir text-3xl dark:bg-primary-900  bg-black text-secondary-100">
-      پروژه های
+    <div className="container">
+      <Routes>
+        <Route path="/auth" element={<Auth/>} />
+      </Routes>
     </div>
   );
 }
