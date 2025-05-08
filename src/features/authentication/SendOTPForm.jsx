@@ -20,7 +20,7 @@ function SendOTPForm({  phoneNumber, onChange, onSubmitProp ,isSendingCode}) {
           {isSendingCode ? (
             <Loader />
           ) : (
-            <button className="w-full btn btn--primary">ارسال کد تایید</button>
+            <button type="submit" className="w-full btn btn--primary">ارسال کد تایید</button>
           )}
         </div>
       </form>

@@ -12,6 +12,7 @@ function CheckOTPForm({
   backStepOtp,
   resendOtpCode,
   sendOtpResponse,
+  goToCompleteProfile,
 }) {
   const [otp, setOtp] = useState("");
   const [timerOtp, setTimerOtp] = useState(90);
@@ -35,14 +36,25 @@ function CheckOTPForm({
 
   const checkOtpHandler = async (e) => {
     e.preventDefault();
-    const { role, isActive, message } = await mutateAsync({ phoneNumber, otp });
+    const {  message, user } = await mutateAsync({
+      phoneNumber,
+      otp,
+    });
     toast.success(message);
 
-    if (isActive) {
-      // if(role === 'FREELANCER')
-      // if(role === 'OWNER')
-    } else {
-      navigate("/complete-profile");
+    if (!user.isActive) {
+      goToCompleteProfile("goToCompleteProfile");
+      navigate("/auth/complete-profile");
+      return;
+    }
+    if (user.status !== 2) {
+      navigate("/");
+      toast.error("پروفایل شما در انتظار تایید");
+      return;
+    }
+    if (user.isActive) {
+      if (role === "FREELANCER") return navigate("/freelancer");
+      if (role === "OWNER") return navigate("/owner");
     }
     try {
     } catch (error) {
@@ -54,10 +66,16 @@ function CheckOTPForm({
     <div>
       <form className="flex flex-col gap-5" onSubmit={checkOtpHandler}>
         {sendOtpResponse && (
-          <div className="text-end " >
+          <div className="text-end ">
             <p className="text-sm">
               <span>{sendOtpResponse.message}</span>
-              <span onClick={() => backStepOtp("sendOtp")} className="text-primary-800 cursor-pointer"> (ویرایش) </span>  
+              <span
+                onClick={() => backStepOtp("sendOtp")}
+                className="text-primary-800 cursor-pointer"
+              >
+                {" "}
+                (ویرایش){" "}
+              </span>
             </p>{" "}
           </div>
         )}
@@ -91,6 +109,7 @@ function CheckOTPForm({
             )}
           </div>
           <button
+            type="submit"
             className="flex gap-2 text-xs items-center"
             onClick={() => backStepOtp("sendOtp")}
           >

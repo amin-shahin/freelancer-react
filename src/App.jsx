@@ -6,6 +6,9 @@ import Auth from "./pages/Auth";
 import { Routes, Route } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
+import CompleteProfileForm from "./features/authentication/CompleteProfileForm";
+import Home from "./pages/Home";
+import NoteFound from "./pages/NoteFound";
 
 const queryClient = new QueryClient();
 function App() {
@@ -28,12 +31,17 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster/>
+      <Toaster />
       <div className="container">
         
         <Routes>
-          <Route path="/" element={<p>fff</p>} />
-          <Route path="/auth" element={<Auth />} />
+
+          <Route path="/" element={<Home/>} />
+          <Route path="/auth" element={<Auth />}>
+            <Route path="complete-profile" element={<CompleteProfileForm />} />
+          </Route>
+          <Route path="*" element={<NoteFound />} />
+
         </Routes>
       </div>
     </QueryClientProvider>

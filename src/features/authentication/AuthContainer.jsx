@@ -4,13 +4,14 @@ import CheckOTPForm from "./CheckOTPForm";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { getOtp } from "../../services/authService";
+import { Outlet } from "react-router";
 
 function AuthContainer() {
-  const [step, setStep] = useState("checkOtp");
+  const [step, setStep] = useState("sendOtp");
   const [phoneNumber, setPhoneNumber] = useState(null);
 
   const {
-    data:sendOtpResponse,
+    data: sendOtpResponse,
     isPending: isSendingCode,
     error,
     mutateAsync,
@@ -25,6 +26,8 @@ function AuthContainer() {
       toast.success(data.message);
       setStep("checkOtp");
     } catch (error) {
+      console.log(error);
+      
       toast.error(error?.response?.data?.message);
     }
   };
@@ -47,8 +50,11 @@ function AuthContainer() {
             backStepOtp={setStep}
             resendOtpCode={sendOtpHandler}
             sendOtpResponse={sendOtpResponse}
+            goToCompleteProfile={setStep}
           />
         );
+      case "goToCompleteProfile":
+        return <Outlet />;
 
       default:
         return null;
