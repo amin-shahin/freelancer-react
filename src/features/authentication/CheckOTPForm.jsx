@@ -1,12 +1,68 @@
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import OTPInput from "react-otp-input";
+import { checkOtp } from "../../services/authService";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
+import Loader from "../../ui/Loader";
+import { HiArrowRight } from "react-icons/hi";
 
-function CheckOTPForm() {
+function CheckOTPForm({
+  phoneNumber,
+  backStepOtp,
+  resendOtpCode,
+  sendOtpResponse,
+}) {
   const [otp, setOtp] = useState("");
+  const [timerOtp, setTimerOtp] = useState(90);
+  const navigate = useNavigate();
+
+  const { data, isPending, error, mutateAsync } = useMutation({
+    mutationFn: checkOtp,
+  });
+
+  useEffect(() => {
+    const timer =
+      timerOtp > 0 &&
+      setInterval(() => {
+        setTimerOtp((prevTime) => prevTime - 1);
+      }, 1000);
+
+    return () => {
+      if (timerOtp) clearInterval(timer);
+    };
+  }, [timerOtp]);
+
+  const checkOtpHandler = async (e) => {
+    e.preventDefault();
+    const { role, isActive, message } = await mutateAsync({ phoneNumber, otp });
+    toast.success(message);
+
+    if (isActive) {
+      // if(role === 'FREELANCER')
+      // if(role === 'OWNER')
+    } else {
+      navigate("/complete-profile");
+    }
+    try {
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
   return (
     <div>
-      <form className="flex flex-col gap-4">
-        <p className="text-lg">کد تایید را وارد نمایید</p>
+      <form className="flex flex-col gap-5" onSubmit={checkOtpHandler}>
+        {sendOtpResponse && (
+          <div className="text-end " >
+            <p className="text-sm">
+              <span>{sendOtpResponse.message}</span>
+              <span onClick={() => backStepOtp("sendOtp")} className="text-primary-800 cursor-pointer"> (ویرایش) </span>  
+            </p>{" "}
+          </div>
+        )}
+
+        <p className="text-lg text-bold mb-2">کد تایید را وارد نمایید</p>
         <OTPInput
           value={otp}
           onChange={setOtp}
@@ -14,8 +70,34 @@ function CheckOTPForm() {
           renderSeparator={<span>-</span>}
           renderInput={(props) => <input {...props} />}
           containerStyle="flex justify-center gap-x-2"
-          inputStyle={'!w-12 p-2 border border border-secondary-400 rounded-lg'}
+          inputStyle={"!w-12 p-2 border border border-secondary-400 rounded-lg"}
         />
+        <div className="w-full">
+          {isPending ? (
+            <Loader />
+          ) : (
+            <button className="w-full btn btn--primary"> تایید</button>
+          )}
+        </div>
+        <div className="w-full flex justify-between items-center">
+          <div className="text-xs flex-row-reverse">
+            {timerOtp ? (
+              <>
+                <p className="inline"> ثانیه تا ارسال مجدد کد </p>
+                <span className="inline-flex text-rose-500">{timerOtp}</span>
+              </>
+            ) : (
+              <button onClick={resendOtpCode}>دریافت مجدد کد </button>
+            )}
+          </div>
+          <button
+            className="flex gap-2 text-xs items-center"
+            onClick={() => backStepOtp("sendOtp")}
+          >
+            <p>بازگشت</p>
+            <HiArrowRight />
+          </button>
+        </div>
       </form>
     </div>
   );

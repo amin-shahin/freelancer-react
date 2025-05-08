@@ -1,11 +1,9 @@
-import CheckOTPForm from "../features/authentication/CheckOTPForm"
-import SendOTPForm from "../features/authentication/SendOTPForm"
+import AuthContainer from "../features/authentication/AuthContainer"
 
 function Auth() {
   return (
     <div className="flex justify-center items-center">
-        {/* <SendOTPForm/> */}
-        <CheckOTPForm/>
+        <AuthContainer/>
     </div>
   )
 }
