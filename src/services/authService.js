@@ -12,3 +12,9 @@ export const completeProfile = async (information) => {
   const { data } = await http.post("/user/complete-profile", information);
   return data.data;
 };
+
+export const userInformation = async () => {
+  const { data } = await http.get("/user/profile");
+  return data.data;
+};
+

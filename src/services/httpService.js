@@ -25,10 +25,10 @@ app.interceptors.response.use(
         });
         if (data) return app(originalConfig);
       } catch (error) {
-        Promise.reject(err);
+       return Promise.reject(error);
       }
     }
-    Promise.reject(err);
+   return Promise.reject(err);
   }
 );
 

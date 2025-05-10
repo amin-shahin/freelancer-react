@@ -9,6 +9,8 @@ import { Toaster } from "react-hot-toast";
 import CompleteProfileForm from "./features/authentication/CompleteProfileForm";
 import Home from "./pages/Home";
 import NoteFound from "./pages/NoteFound";
+import AppLayoutDashboard from "./features/appLayout/AppLayoutDashboard";
+import Owner from "./pages/Owner";
 
 const queryClient = new QueryClient();
 function App() {
@@ -32,16 +34,16 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster />
-      <div className="container">
-        
+      <div className="">
         <Routes>
-
-          <Route path="/" element={<Home/>} />
+          <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />}>
             <Route path="complete-profile" element={<CompleteProfileForm />} />
           </Route>
+          <Route element={<AppLayoutDashboard />}>
+            <Route path="/owner" element={<Owner />} />
+          </Route>
           <Route path="*" element={<NoteFound />} />
-
         </Routes>
       </div>
     </QueryClientProvider>
