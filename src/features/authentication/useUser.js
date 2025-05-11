@@ -6,6 +6,7 @@ function useUser() {
     queryKey: ["get-user"],
     queryFn: userInformation,
     refetchOnReconnect: true,
+    retry:false
   });
 
    

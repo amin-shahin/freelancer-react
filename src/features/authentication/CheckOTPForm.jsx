@@ -36,7 +36,7 @@ function CheckOTPForm({
 
   const checkOtpHandler = async (e) => {
     e.preventDefault();
-    const {  message, user } = await mutateAsync({
+    const { message, user } = await mutateAsync({
       phoneNumber,
       otp,
     });
@@ -55,6 +55,7 @@ function CheckOTPForm({
     if (user.isActive) {
       if (role === "FREELANCER") return navigate("/freelancer");
       if (role === "OWNER") return navigate("/owner");
+      if (role === "ADMIN") return navigate("/admin");
     }
     try {
     } catch (error) {
