@@ -9,11 +9,13 @@ import { useState } from "react";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useRemoveProject } from "./useRemoveProject";
 
+
 function ProjectRow({ project, index }) {
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
   const { deleteProject, isDeletingProject } = useRemoveProject();
+
 
   return (
     <Table.Row key={project._id}>
