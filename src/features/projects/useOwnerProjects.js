@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllOwnerProjects } from "../../services/ownerService";
+import { getAllOwnerProjects } from "../../services/projectService";
 
 export function useOwnerProject() {
   const { data, isLoading } = useQuery({
