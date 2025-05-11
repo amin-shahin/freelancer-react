@@ -1,8 +1,13 @@
 import Empty from "../../ui/Empty";
 import Loader from "../../ui/Loader";
+import Table from "../../ui/Table";
 import convertDateToLocalDate from "../../utils/convertDateToLocalDate";
-import { convertToPersianNumber, toPersianNumbersWithComma } from "../../utils/convertToPersianNumber";
+import {
+  convertToPersianNumber,
+  toPersianNumbersWithComma,
+} from "../../utils/convertToPersianNumber";
 import toTruncateText from "../../utils/toTruncateText";
+import ProjectRow from "./ProjectRow";
 import { useOwnerProject } from "./useOwnerProjects";
 
 function OnwerProjectTable() {
@@ -13,53 +18,30 @@ function OnwerProjectTable() {
   if (!projects.length) return <Empty />;
 
   return (
-    <div>
-      <table dir="rtl" className="shadow-lg">
-        <thead>
-          <tr className="title-row">
-            <th>#</th>
-            <th>عتوان</th>
-            <th>دسته بندی</th>
-            <th>فریلنسر</th>
-            <th>بودجه</th>
-            <th>ددلاین</th>
-            <th>وضعیت</th>
-            <th>تگ ها</th>
-            <th>عملیات</th>
-          </tr>
-        </thead>
-        <tbody className="bg-secondary-0">
+    
+      <Table>
+        <Table.Header>
+          <th>#</th>
+          <th>عتوان</th>
+          <th>دسته بندی</th>
+          <th>فریلنسر</th>
+          <th>بودجه</th>
+          <th>ددلاین</th>
+          <th>وضعیت</th>
+          <th>تگ ها</th>
+          <th>عملیات</th>
+        </Table.Header>
+        <Table.Body>
           {projects.map((project, index) => (
-            <tr key={project._id}>
-              <td>{index + 1}</td>
-              <td>{toTruncateText(project.title , 20)}</td>
-              <td>{project.category.title}</td>
-              <td>{project.freelancer?.name || "-"}</td>
-              <td>{toPersianNumbersWithComma(project.budget)+ ' ریال '}</td>
-              <td>{convertDateToLocalDate(project.deadline)}</td>
-              <td>
-                {project.status === "OPEN" ? (
-                  <span className="badge badge--success">باز</span>
-                ) : (
-                  <span className="badge badge--danger">بسته</span>
-                )}
-              </td>
-              <td className="flex flex-wrap gap-x-1.5">
-                {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="badge badge--secondary flex place-items-center"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </td>
-              <td>...</td>
-            </tr>
+            <ProjectRow project={project} index={index} />
+
+      
+          
           ))}
-        </tbody>
-      </table>
-    </div>
+        </Table.Body>
+      </Table>
+ 
+    
   );
 }
 
