@@ -6,7 +6,7 @@ function Modal({ children, open, onClose, title }) {
 
   return (
     open && (
-      <div className="fixed top-0 left-0 backdrop-blur-md w-full h-screen bg-secondary-100/50 z-50">
+      <div className="fixed top-0 left-0 backdrop-blur-md w-full h-screen bg-secondary-100/50 z-50 ">
         <div
           ref={ref}
           className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4 rounded-md bg-secondary-0 transition-all duration-300
