@@ -1,4 +1,4 @@
-function RadioButton({label,name,onChange,value,id}) {
+function RadioButton({ label, name, value, id, register, watch, errors ,validationSchema}) {
   return (
     <div className="flex items-baseline gap-x-2">
       <input
@@ -7,7 +7,9 @@ function RadioButton({label,name,onChange,value,id}) {
         value={value}
         name={name}
         id={id}
-        onChange={onChange}
+        {...register(name, validationSchema)}
+        errors={errors}
+        watch={watch(name)}
       />
       <label className="w-4 h-4 cursor-pointer" htmlFor={id}>
         {label}

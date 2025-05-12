@@ -6,11 +6,21 @@ import { completeProfile } from "../../services/authService";
 import RadioButton from "../../ui/radioButton";
 import Loader from "../../ui/Loader";
 import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import TextFieldInputRHF from "../../ui/TextFieldInputRHF";
+import RadioInputGroup from "../../ui/RadioInputGroup";
 
 function CompleteProfileForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
+  // const [name, setName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [role, setRole] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
 
   const navigate = useNavigate();
 
@@ -18,11 +28,13 @@ function CompleteProfileForm() {
     mutationFn: completeProfile,
   });
 
-  const completeProfileHandler = async (e) => {
-    e.preventDefault();
+  const completeProfileHandler = async (data) => {
+    // e.preventDefault();
+    console.log(data);
 
     try {
-      const { user, message } = await mutateAsync({ name, email, role });
+      // const { user, message } = await mutateAsync({ name, email, role });
+      const { user, message } = await mutateAsync(data);
 
       toast.success(message);
 
@@ -39,9 +51,9 @@ function CompleteProfileForm() {
       if (isActive) {
         if (user.role === "FREELANCER") return navigate("/freelancer");
         if (user.role === "OWNER") return navigate("/owner");
+        if (user.role === "ADMIN") return navigate("/admin");
       }
     } catch (error) {
-      
       toast.error(error?.response?.data?.message);
     }
   };
@@ -50,36 +62,58 @@ function CompleteProfileForm() {
     <div className="w-full flex justify-center items-center">
       <form
         className="w-full flex flex-col gap-4 sm:max-w-sm"
-        onSubmit={completeProfileHandler}
+        onSubmit={handleSubmit(completeProfileHandler)}
       >
-        <TextFieldInput
+        <TextFieldInputRHF
           label={"نام و نام خانوادگی"}
           name={"name"}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          register={register}
+          required
+          validationSchema={{
+            required: "نام و نام خانوادگی الزامی است",
+            minLength: { value: 5, message: "حداقل 5 کاراکتر وارد نمایید" },
+            maxLength: {
+              value: 60,
+              message: "حداکثر 60 کاراکتر میتوان وارد کرد",
+            },
+          }}
+          errors={errors}
+
+          // value={name}
+          // onChange={(e) => setName(e.target.value)}
         />
-        <TextFieldInput
+        <TextFieldInputRHF
           label={"ایمیل"}
           name={"email"}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          required
+          register={register}
+          validationSchema={{
+            required: " ایمیل الزامی است",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "ایمیل نامعتبر است.",
+            },
+          }}
+
+          errors={errors}
+          // value={email}
+          // onChange={(e) => setEmail(e.target.value)}
         />
-        <div className="flex justify-around">
-          <RadioButton
-            label={"کارفرما"}
-            id={"OWNER"}
-            name={"role"}
-            onChange={(e) => setRole(e.target.value)}
-            value="OWNER"
-          />
-          <RadioButton
-            label={"فریلنسر"}
-            id={"FREELANCER"}
-            name={"role"}
-            onChange={(e) => setRole(e.target.value)}
-            value="FREELANCER"
-          />
-        </div>
+        <RadioInputGroup
+          errors={errors}
+          register={register}
+          watch={watch}
+          config={{
+            name: "role",
+            validationSchema: { required: "انتخاب نقش ضروری است." },
+            options: [
+              { label: "کارفرما", value: "OWNER" },
+              { label: "فریلنسر", value: "FREELANCER" },
+            ],
+          }}
+
+        />
+
         <div className="w-full">
           {isPending ? (
             <Loader />

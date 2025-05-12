@@ -53,9 +53,9 @@ function CheckOTPForm({
       return;
     }
     if (user.isActive) {
-      if (role === "FREELANCER") return navigate("/freelancer");
-      if (role === "OWNER") return navigate("/owner");
-      if (role === "ADMIN") return navigate("/admin");
+      if (user.role === "FREELANCER") return navigate("/freelancer");
+      if (user.role === "OWNER") return navigate("/owner");
+      if (user.role === "ADMIN") return navigate("/admin");
     }
     try {
     } catch (error) {
@@ -67,7 +67,7 @@ function CheckOTPForm({
     <div>
       <form className="flex flex-col gap-5" onSubmit={checkOtpHandler}>
         {sendOtpResponse && (
-          <div className="text-end ">
+          <div className="text-start ">
             <p className="text-sm">
               <span>{sendOtpResponse.message}</span>
               <span
@@ -88,8 +88,8 @@ function CheckOTPForm({
           numInputs={6}
           renderSeparator={<span>-</span>}
           renderInput={(props) => <input {...props} />}
-          containerStyle="flex justify-center gap-x-2"
-          inputStyle={"!w-12 p-2 border border border-secondary-400 rounded-lg"}
+          containerStyle="flex justify-center gap-x-2 flex-row-reverse"
+          inputStyle={"!w-12 p-2 border border border-secondary-400 rounded-lg "}
         />
         <div className="w-full">
           {isPending ? (
@@ -99,24 +99,24 @@ function CheckOTPForm({
           )}
         </div>
         <div className="w-full flex justify-between items-center">
-          <div className="text-xs flex-row-reverse">
-            {timerOtp ? (
-              <>
-                <p className="inline"> ثانیه تا ارسال مجدد کد </p>
-                <span className="inline-flex text-rose-500">{timerOtp}</span>
-              </>
-            ) : (
-              <button onClick={resendOtpCode}>دریافت مجدد کد </button>
-            )}
-          </div>
           <button
             type="submit"
             className="flex gap-2 text-xs items-center"
             onClick={() => backStepOtp("sendOtp")}
           >
-            <p>بازگشت</p>
             <HiArrowRight />
+            <p>بازگشت</p>
           </button>
+          <div className="text-xs ">
+            {timerOtp ? (
+              <div>
+                <span className="inline-flex text-rose-500">{timerOtp}</span>
+                <p className="inline"> ثانیه تا ارسال مجدد کد </p>
+              </div>
+            ) : (
+              <button onClick={resendOtpCode}>دریافت مجدد کد </button>
+            )}
+          </div>
         </div>
       </form>
     </div>

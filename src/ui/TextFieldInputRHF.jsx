@@ -22,7 +22,7 @@ function TextFieldInputRHF({
         {...register(name, validationSchema)}
       />
       {errors && errors[name] && (
-        <span className="text-rose-500 text-sm block">
+        <span className="text-rose-500 text-sm block text-start">
           {errors[name]?.message}
         </span>
       )}

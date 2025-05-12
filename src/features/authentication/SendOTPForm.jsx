@@ -1,7 +1,8 @@
-import TextFieldInput from "../../ui/TextFieldInput";
+import TextFieldInputRHF from "../../ui/TextFieldInputRHF";
 import Loader from "../../ui/Loader";
 
-function SendOTPForm({  phoneNumber, onChange, onSubmitProp ,isSendingCode}) {
+function SendOTPForm({ register,errors, onSubmitProp ,isSendingCode}) {
+
 
 
   return (
@@ -10,12 +11,16 @@ function SendOTPForm({  phoneNumber, onChange, onSubmitProp ,isSendingCode}) {
         className="w-full flex flex-col gap-4 sm:max-w-sm"
         onSubmit={onSubmitProp}
       >
-        <TextFieldInput
-          name={"phoneNumber"}
+        <TextFieldInputRHF
           label={"شماره موبایل"}
-          value={phoneNumber}
-          onChange={onChange}
+          name={'phoneNumber'}
+          register={register}
+          required
+          errors={errors}
+          type={'number'}
+          
         />
+
         <div className="w-full">
           {isSendingCode ? (
             <Loader />
