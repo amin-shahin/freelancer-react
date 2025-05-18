@@ -6,11 +6,13 @@ import { useOwnerProject } from "./useOwnerProjects";
 
 function OnwerProjectTable() {
   const { isLoading, projects } = useOwnerProject();
+
   console.log(projects);
+
   
 
   if (isLoading) return <Loader />;
-  if (!projects.length) return <Empty name={'پروژه ای'} />;
+  if (projects.length === 0) return <Empty name={'پروژه ای'} />;
 
   return (
     
@@ -25,11 +27,11 @@ function OnwerProjectTable() {
           <th>وضعیت</th>
           <th>تگ ها</th>
           <th>عملیات</th>
+          <th>درخواست ها</th>
         </Table.Header>
         <Table.Body>
           {projects.map((project, index) => (
             <ProjectRow project={project} index={index} />
-          
           ))}
         </Table.Body>
       </Table>

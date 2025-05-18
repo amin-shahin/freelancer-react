@@ -1,20 +1,81 @@
 import { useForm } from "react-hook-form";
 import TextFieldInputRHF from "../../ui/TextFieldInputRHF";
+import RHFSelect from "../../ui/RHFSelect";
+import { TagsInput } from "react-tag-input-component";
+import { useState } from "react";
+import DatePickerField from "../../ui/DatePickerField";
+import useCategories from "../categories/useCategories";
+import useCreateProjectForm from "./useCreateProjectForm";
+import useEditProjectForm from "./useEditProjectForm";
+import Loader from "../../ui/Loader";
 
-function CreateProjectForm() {
+function CreateProjectForm({ onClose, toEditProject = {} }) {
+  const {
+    _id: editId,
+    budget,
+    deadline,
+    title,
+    description,
+    category,
+    tags: prevTags,
+  } = toEditProject;
+  const isEditMode = Boolean(editId);
+
+  let editValues = {};
+  if (isEditMode) {
+    editValues = {
+      budget,
+      title,
+      description,
+      category: category._id,
+    };
+  }
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: editValues });
+
+  const [tags, setTags] = useState(prevTags || []);
+  const [date, setDate] = useState(deadline || new Date());
+
+  const { categories, transformedCategories, isLoading } = useCategories();
+
+  const { createProject, isCreatingLoading } = useCreateProjectForm();
+
+  const { editProject, isEditingLoading } = useEditProjectForm();
 
   const onSubmit = (dataForm) => {
-    console.log(dataForm);
+    const newProject = {
+      ...dataForm,
+      deadline: new Date(date).toISOString(),
+      tags,
+    };
+    if (isEditMode) {
+      editProject(
+        { id: editId, newProject },
+        {
+          onSuccess: () => {
+            onClose();
+            reset();
+          },
+        }
+      );
+    } else {
+      createProject(newProject, {
+        onSuccess: () => {
+          onClose();
+          reset();
+        },
+      });
+    }
   };
 
   return (
-    <div>
-      <form className="flex flex-col gap-y-3" onSubmit={handleSubmit(onSubmit)}>
+    <div className="">
+      <form className="flex flex-col gap-y-4" onSubmit={handleSubmit(onSubmit)}>
         <TextFieldInputRHF
           register={register}
           errors={errors}
@@ -59,10 +120,32 @@ function CreateProjectForm() {
           required
           label={"بودچه"}
         />
+        <RHFSelect
+          register={register}
+          name="category"
+          label={"دسته بندی"}
+          validationSchema={{}}
+          errors={errors}
+          required
+          options={categories}
+        />
 
-        <button type="submit" className="btn btn--primary">
-          ایجاد پروژه
-        </button>
+        <TagsInput
+          value={tags}
+          onChange={setTags}
+          name="tags"
+          placeHolder="تگ را وارد کنید"
+        />
+
+        <DatePickerField label={"ددلاین"} date={date} setDate={setDate} />
+
+        {isEditingLoading || isCreatingLoading ? (
+          <Loader />
+        ) : (
+          <button type="submit" className="btn btn--primary mt-3">
+            {isEditMode ? "ویرایش" : <span>ایجاد پروژه</span>}
+          </button>
+        )}
       </form>
     </div>
   );

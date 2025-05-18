@@ -6,6 +6,8 @@ export function useOwnerProject() {
     queryFn: getAllOwnerProjects,
     queryKey: ["owner-projects"],
     refetchOnReconnect: true,
+    retry:false,
+
   });
 
   const { projects } = data || {};

@@ -1,4 +1,4 @@
-import { HiOutlineTrash } from "react-icons/hi";
+import { HiEye, HiOutlineTrash } from "react-icons/hi";
 import { TbPencilMinus } from "react-icons/tb";
 import Table from "../../ui/Table";
 import convertDateToLocalDate from "../../utils/convertDateToLocalDate";
@@ -8,6 +8,9 @@ import Modal from "../../ui/Modal";
 import { useState } from "react";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useRemoveProject } from "./useRemoveProject";
+import CreateProjectForm from "./CreateProjectForm";
+import ToggleProjectStatus from "./ToggleProjectStatus";
+import { Link } from "react-router";
 
 
 function ProjectRow({ project, index }) {
@@ -15,6 +18,7 @@ function ProjectRow({ project, index }) {
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
   const { deleteProject, isDeletingProject } = useRemoveProject();
+
 
 
   return (
@@ -26,11 +30,7 @@ function ProjectRow({ project, index }) {
       <td>{toPersianNumbersWithComma(project.budget) + " ریال "}</td>
       <td>{convertDateToLocalDate(project.deadline)}</td>
       <td>
-        {project.status === "OPEN" ? (
-          <span className="badge badge--success">باز</span>
-        ) : (
-          <span className="badge badge--danger">بسته</span>
-        )}
+       <ToggleProjectStatus project={project}/>
       </td>
       <td className="flex flex-wrap gap-x-1.5">
         {project.tags.map((tag) => (
@@ -76,10 +76,15 @@ function ProjectRow({ project, index }) {
               onClose={() => setIsOpenEditModal(false)}
               title={`ویرایش ${project.title}`}
             >
-              this is edit modal ....
+             <CreateProjectForm toEditProject={project} onClose={()=>setIsOpenEditModal(false)} />
             </Modal>
           </>
         </div>
+      </td>
+      <td>
+        <Link to={project._id} className="w-full flex items-center justify-center">
+        <HiEye className="w-5 h-5 text-primary-700"/>
+        </Link>
       </td>
     </Table.Row>
   );

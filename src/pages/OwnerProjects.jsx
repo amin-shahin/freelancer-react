@@ -25,7 +25,7 @@ function OwnerProjects() {
             onClose={() => setIsOpenCreateProject(false)}
             title={"اضافه کردن پروژه جدید"}
           >
-            <CreateProjectForm />
+            <CreateProjectForm  onClose={() => setIsOpenCreateProject(false)} />
           </Modal>
         </>
       </div>
