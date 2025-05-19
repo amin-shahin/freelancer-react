@@ -18,3 +18,7 @@ export const userInformation = async () => {
   return data.data;
 };
 
+export const logoutApi = async () => {
+  const { data } = await http.post("/user/logout");
+  return data.data;
+};

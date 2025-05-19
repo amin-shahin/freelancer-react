@@ -5,11 +5,7 @@ import ProjectRow from "./ProjectRow";
 import { useOwnerProject } from "./useOwnerProjects";
 
 function OnwerProjectTable() {
-  const { isLoading, projects } = useOwnerProject();
-
-  console.log(projects);
-
-  
+  const { isLoading, projects } = useOwnerProject();  
 
   if (isLoading) return <Loader />;
   if (projects.length === 0) return <Empty name={'پروژه ای'} />;
