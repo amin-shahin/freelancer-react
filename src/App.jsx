@@ -13,6 +13,7 @@ import OwnerSingleProject from "./pages/OwnerSingleProject";
 import OwnerProjects from "./pages/OwnerProjects";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import { DarkModeContextProvider } from "./context/DarkModeContext";
+import OwnerLayout from "./features/appLayout/OwnerLayout";
 
 const queryClient = new QueryClient();
 function App() {
@@ -31,7 +32,7 @@ function App() {
                 element={<CompleteProfileForm />}
               />
             </Route>
-            <Route path="/owner" element={<AppLayoutDashboard />}>
+            <Route path="/owner" element={<OwnerLayout />}>
               <Route index element={<Navigate to={"dashboard"} replace />} />
               <Route path="dashboard" element={<OwnerDashboard />} />
               <Route path="projects" element={<OwnerProjects />} />
