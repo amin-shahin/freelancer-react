@@ -1,7 +1,8 @@
+import OwnerDashboardMainContent from "../features/owner/OwnerDashboardMainContent";
 
 function OwnerDashboard() {
   return (
-    <div>OwnerDashboard page</div>
+   <OwnerDashboardMainContent/>
   )
 }
 
