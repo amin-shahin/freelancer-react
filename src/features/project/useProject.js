@@ -12,5 +12,5 @@ export default function useProject() {
 
   const { project } = data || {};
 
-  return { project ,isLoading};
+  return { project, isLoading };
 }

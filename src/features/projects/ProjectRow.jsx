@@ -12,14 +12,13 @@ import CreateProjectForm from "./CreateProjectForm";
 import ToggleProjectStatus from "./ToggleProjectStatus";
 import { Link } from "react-router";
 
-
 function ProjectRow({ project, index }) {
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
   const { deleteProject, isDeletingProject } = useRemoveProject();
 
-
+  console.log(project);
 
   return (
     <Table.Row key={project._id}>
@@ -30,7 +29,7 @@ function ProjectRow({ project, index }) {
       <td>{toPersianNumbersWithComma(project.budget) + " ریال "}</td>
       <td>{convertDateToLocalDate(project.deadline)}</td>
       <td>
-       <ToggleProjectStatus project={project}/>
+        <ToggleProjectStatus project={project} />
       </td>
       <td className="flex flex-wrap gap-x-1.5">
         {project.tags.map((tag) => (
@@ -76,14 +75,20 @@ function ProjectRow({ project, index }) {
               onClose={() => setIsOpenEditModal(false)}
               title={`ویرایش ${project.title}`}
             >
-             <CreateProjectForm toEditProject={project} onClose={()=>setIsOpenEditModal(false)} />
+              <CreateProjectForm
+                toEditProject={project}
+                onClose={() => setIsOpenEditModal(false)}
+              />
             </Modal>
           </>
         </div>
       </td>
       <td>
-        <Link to={project._id} className="w-full flex items-center justify-center">
-        <HiEye className="w-5 h-5 text-primary-700"/>
+        <Link
+          to={project._id}
+          className="w-full flex items-center justify-center"
+        >
+          <HiEye className="w-5 h-5 text-primary-700" />
         </Link>
       </td>
     </Table.Row>

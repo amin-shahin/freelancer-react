@@ -12,7 +12,6 @@ function ChangeStatusProposalSelect({ proposalId, onClose }) {
     { label: "تایید", value: 2 },
   ];
 
-  console.log(proposalId);
 
   const { register, handleSubmit } = useForm();
   const { changeStatusProposal, isChangeLoading } = useChangeStatusProposal();
@@ -20,9 +19,9 @@ function ChangeStatusProposalSelect({ proposalId, onClose }) {
 
   const {projectId} = useParams()
   const queryClient = useQueryClient();
-  const onSubmit = async (data) => {
-    await changeStatusProposal(
-      { id: proposalId, data },
+  const onSubmit =  (data) => {
+     changeStatusProposal(
+      { proposalId, projectId ,...data },
       {
         onSuccess: () => {
           onClose();

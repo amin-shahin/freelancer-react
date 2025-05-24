@@ -15,7 +15,7 @@ function ProposalRow({ proposal, index }) {
       text: "رد شده",
     },
     {
-      className: "badge--primary",
+      className: "badge--secondary",
       text: "در انتظار تایید",
     },
     {

@@ -8,17 +8,18 @@ import { Toaster } from "react-hot-toast";
 import CompleteProfileForm from "./features/authentication/CompleteProfileForm";
 import Home from "./pages/Home";
 import NoteFound from "./pages/NoteFound";
-import AppLayoutDashboard from "./features/appLayout/AppLayoutDashboard";
 import OwnerSingleProject from "./pages/OwnerSingleProject";
 import OwnerProjects from "./pages/OwnerProjects";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import { DarkModeContextProvider } from "./context/DarkModeContext";
 import OwnerLayout from "./features/appLayout/OwnerLayout";
+import FreelancerLayout from "./features/appLayout/FreelancerLayout";
+import FreelancerDashboard from "./pages/FreelancerDashboard";
+import FreelancerProposals from "./features/freelancer/FreelancerProposals";
+import SubmittedProjects from "./pages/SubmittedProjects";
 
 const queryClient = new QueryClient();
 function App() {
-
-
   return (
     <DarkModeContextProvider>
       <QueryClientProvider client={queryClient}>
@@ -41,6 +42,13 @@ function App() {
                 element={<OwnerSingleProject />}
               />
             </Route>
+            <Route path="/freelancer" element={<FreelancerLayout />}>
+              <Route index element={<Navigate to={"dashboard"} replace />} />
+              <Route path="dashboard" element={<FreelancerDashboard />} />
+              <Route path="projects" element={<SubmittedProjects />} />
+              <Route path="proposals" element={<FreelancerProposals />} />
+            </Route>
+
             <Route path="*" element={<NoteFound />} />
           </Routes>
         </div>

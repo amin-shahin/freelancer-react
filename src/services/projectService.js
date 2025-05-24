@@ -4,6 +4,10 @@ export function getAllOwnerProjects() {
   return http.get("/project/owner-projects").then(({ data }) => data.data);
 }
 
+export function getAllProjects(search) {
+  return http.get(`/project/list${search}`).then(({ data }) => data.data);
+}
+
 export function deleteProjectApi(id) {
   return http.delete(`/project/${id}`).then(({ data }) => data.data);
 }
