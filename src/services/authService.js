@@ -18,6 +18,17 @@ export const userInformation = async () => {
   return data.data;
 };
 
+export const getAllUsers = async () => {
+  const { data } = await http.get("/admin/user/list");
+  return data.data;
+};
+
+export function changeUserStatusApi({ userId, userStatus }) {
+  return http
+    .patch(`/admin/user/verify/${userId}`, {status})
+    .then(({ data }) => data.data);
+}
+
 export const logoutApi = async () => {
   const { data } = await http.post("/user/logout");
   return data.data;

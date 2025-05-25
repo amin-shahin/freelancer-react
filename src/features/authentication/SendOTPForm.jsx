@@ -6,7 +6,7 @@ function SendOTPForm({ register,errors, onSubmitProp ,isSendingCode}) {
 
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-full flex justify-center items-center h-screen bg-secondary-0">
       <form
         className="w-full flex flex-col gap-4 sm:max-w-sm"
         onSubmit={onSubmitProp}

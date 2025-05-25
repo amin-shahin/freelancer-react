@@ -21,5 +21,8 @@ export default function useAuthorized() {
     if (user && user.role === ROLES[role]) isAuthorized = true;
   }
 
-  return { user, isLoading, isAuthenticated, isAuthorized };
+  let isVerified = false;
+  if(user && Number(user.status) === 2) isVerified=true;
+
+  return { user, isLoading, isAuthenticated, isAuthorized ,isVerified };
 }

@@ -3,7 +3,7 @@ import { getAllProjects } from "../../services/projectService";
 import { useLocation } from "react-router";
 import queryString from "query-string";
 
-export function useProjects() {
+export  function useProjects() {
   const { search } = useLocation();
   const queryStringParse = queryString.parse(search);
   const { data, isLoading } = useQuery({

@@ -4,7 +4,6 @@ import ProposalRow from "./ProposalRow";
 import Empty from '../../ui/Empty'
 
 function ProposalTable({ proposals }) {
-  console.log(proposals);
 
   if (proposals?.length === 0) return <Empty name={"درخواستی "} />;
   return (
