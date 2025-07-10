@@ -15,8 +15,13 @@ import HorizontalScroll from "../features/Home/HorizontalScroll";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import OurTeam from "../features/Home/OurTeam";
+import Slider from "../ui/Slider";
+import { useProjects } from "../features/projects/useProjects";
 
 function Home() {
+  const { projects, isLoading } = useProjects();
+  console.log(projects);
+  
   useGSAP(() => {
     gsap.to(".text-top-site", {
       opacity: 1,
@@ -203,8 +208,7 @@ function Home() {
       </div>
 
       <OurTeam />
-      
-
+      <Slider slidesData={projects} />
     </div>
   );
 }

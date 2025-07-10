@@ -73,7 +73,7 @@ body {
   min-height: 100vh;
   user-select: none;
   background-color: var(--background-app-rgb);
-  
+
   &.dark {
     --color-secondary-900: rgb(249, 250, 251);
     --color-secondary-800: rgb(243, 244, 246);
@@ -86,7 +86,7 @@ body {
     --color-secondary-100: rgb(31, 41, 55);
     --color-secondary-50: rgb(17, 24, 39);
     --color-secondary-0: rgb(24, 33, 47);
-    --background-app-rgb:rgb(24, 33, 47);
+    --background-app-rgb: rgb(24, 33, 47);
     --backdrop-color: rbg(0, 0, 0);
   }
 }
@@ -177,9 +177,8 @@ button:disabled {
 }
 
 @utility shadow-card {
-  @apply shadow-[0px_6px_40px_-5px_rgba(0,_0,_0,_0.1)]
+  @apply shadow-[0px_6px_40px_-5px_rgba(0,_0,_0,_0.1)];
 }
-
 
 /* inupt number */
 input::-webkit-outer-spin-button,
@@ -225,3 +224,70 @@ table td {
 }
 
 /*  react tag input */
+
+.swiper {
+  width: 100%;
+  height: 100%;
+  transition: all 1s ease-out;
+  padding: 30px !important;
+  padding-top: 70px !important;
+  position: ;
+}
+
+.swiper-wrapper {
+  /* @apply p-4; */
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: space-between !important;
+  gap: 8px;
+  background: linear-gradient(to top, var(--color-secondary-500), transparent);
+  padding: 20px;
+  border-radius: 12px;
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 350px !important;
+  box-shadow: 0px 0px 43px -4px rgba(0, 0, 0, 0.1);
+  transition: all 1s ease-out;
+}
+.swiper-slide:hover {
+  box-shadow: inset 0px 0px 43px -4px rgba(0, 0, 0, 0.1);
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  @apply w-12 h-12 flex justify-center items-center aspect-square  rounded-full bg-primary-900 text-white cursor-pointer;
+}
+.swiper-button-next {
+  @apply absolute top-0 right-18 z-10;
+}
+.swiper-button-prev {
+  @apply absolute top-0 right-4 z-10;
+}
+
+.swiper-button-next::after {
+  content: "بعدی";
+}
+.swiper-button-prev::after {
+  content: "قبلی";
+}
+
+.projects {
+  position: absolute;
+  top: 24%;
+  left: 30px;
+  cursor: pointer;
+}

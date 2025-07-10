@@ -31,7 +31,7 @@ const ourteamList = [
 const OurTeam = () => {
   return (
     <div className="py-10 px-4">
-      <h2 className="badge text-4xl font-bold my-10"> تیم ما</h2>
+      <h2 className="badge text-4xl font-bold my-10 text-secondary-700 w-full text-start"> تیم ما</h2>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {ourteamList.map((item) => (
           <div className="flex flex-col gap-y-3 items-center p-5 rounded-xl bg-secondary-50 dark:bg-secondary-100 shadow-xl transition duration-300 hover:shadow-2xl">
