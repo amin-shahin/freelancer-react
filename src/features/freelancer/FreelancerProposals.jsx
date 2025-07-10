@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { HiPlus } from "react-icons/hi";
-import Modal from "../../ui/Modal";
+
 import useProposals from "../proposals/useProposals";
 import ProposalTable from "../proposals/ProposalTable";
 

@@ -2,6 +2,7 @@ import React from "react";
 import Table from "../../ui/Table";
 import Loader from "../../ui/Loader";
 import ProposalRow from "./ProposalRow";
+import Empty from "../../ui/Empty";
 
 function ProposalTable({ proposals ,isLoading}) {
   if (isLoading) return <Loader />;

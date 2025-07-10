@@ -1,9 +1,6 @@
-import { useState } from "react";
-import TextFieldInput from "../../ui/TextFieldInput";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { completeProfile } from "../../services/authService";
-import RadioButton from "../../ui/radioButton";
 import Loader from "../../ui/Loader";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";

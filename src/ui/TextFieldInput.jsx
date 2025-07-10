@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function TextFieldInput({ label, name, onChange, value }) {
+function TextFieldInput({ label, name, onChange, value,type='text' }) {
   return (
     <>
       <label htmlFor={name} className="text-secondary-800 text-start">
@@ -12,7 +12,7 @@ function TextFieldInput({ label, name, onChange, value }) {
         value={value}
         onChange={onChange}
         className="textField__input"
-        type={t}
+        type={type}
         autoComplete="off"
       />
     </>

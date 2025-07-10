@@ -1,13 +1,18 @@
 import { useProjects } from '../../projects/useProjects';
 import Table from '../../../ui/Table';
 import Loader from '../../../ui/Loader';
+import Empty from '../../../ui/Empty';
 import ProjectsRow from './ProjectsRow';
 
 function ProjectsTable() {
     const { isLoading, projects } = useProjects();  
+    console.log(isLoading,projects);
+    
+    
 
     if (isLoading) return <Loader />;
-    if (projects.length === 0) return <Empty name={'پروژه ای'} />;
+
+    if (!projects.length) return <Empty name={'پروژه ای'} />;
   
     return (
       

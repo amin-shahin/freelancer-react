@@ -176,6 +176,11 @@ button:disabled {
   @apply bg-red-500 text-white;
 }
 
+@utility shadow-card {
+  @apply shadow-[0px_6px_40px_-5px_rgba(0,_0,_0,_0.1)]
+}
+
+
 /* inupt number */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

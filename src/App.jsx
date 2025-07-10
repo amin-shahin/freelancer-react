@@ -21,6 +21,8 @@ import AdminLayout from "./features/appLayout/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
 import AllUser from "./pages/AllUser";
 import NotFound from "./pages/NotFound";
+import MainAppLayout from "./features/appLayout/MainAppLayout";
+import AboutUs from "./pages/AboutUs";
 
 const queryClient = new QueryClient();
 function App() {
@@ -28,15 +30,19 @@ function App() {
     <DarkModeContextProvider>
       <QueryClientProvider client={queryClient}>
         <Toaster />
-        <div className="">
+        <div>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<Auth />}>
-              <Route
-                path="complete-profile"
-                element={<CompleteProfileForm />}
-              />
+            <Route path="/" element={<MainAppLayout />}>
+              <Route index element={<Home />} />
+              <Route path="/auth" element={<Auth />}>
+                <Route
+                  path="complete-profile"
+                  element={<CompleteProfileForm />}
+                />
+              </Route>
+              <Route path="/about-us" element={<AboutUs/>}/>
             </Route>
+
             <Route
               path="/owner"
               element={

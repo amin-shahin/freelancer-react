@@ -40,14 +40,13 @@ function AuthContainer() {
   });
 
   const sendOtpHandler = async (formData) => {
-    console.log(formData);
 
-    // e.preventDefault();
     try {
       const data = await mutateAsync(formData);
       toast.success(data.message);
       setStep("checkOtp");
     } catch (error) {
+      console.log(error)
       toast.error(error?.response?.data?.message);
     }
   };
