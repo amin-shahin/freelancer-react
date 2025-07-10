@@ -1,10 +1,11 @@
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import useUser from "../authentication/useUser";
 import { useEffect, useState } from "react";
 import useOutsideClick from "../../hooks/useOutsideClick";
 import { HiBars3 } from "react-icons/hi2";
 import ToggleTheme from "../Theme/ToggleTheme";
 import Logout from "../authentication/Logout";
+import { useMediaQuery } from "react-responsive";
 
 const MainHeader = () => {
   const { isLoading, user } = useUser();
@@ -15,6 +16,12 @@ const MainHeader = () => {
     () => setIsShowUserDashboardMenu(false),
     true
   );
+  const isMedium = useMediaQuery({ maxWidth: "768px" });
+
+  useEffect(() => {
+    setIsShowUserDashboardMenu(false);
+    setIsShowMenu(false);
+  }, [isMedium]);
 
   let role;
 
@@ -29,7 +36,7 @@ const MainHeader = () => {
   return (
     <>
       {" "}
-      <div className="flex items-center justify-between relative px-4 py-3">
+      <div className="flex items-center justify-between relative px-4 py-3 ">
         <div className="flex gap-x-3">
           <HiBars3
             onClick={() => setIsShowMenu((prev) => !prev)}
@@ -168,11 +175,10 @@ const MainHeader = () => {
         </Link>
 
         <Link
-          className="hover:bg-secondary-200 transition-all duration-300 p-2 text-secondary-800 flex justify-center items-center gap-x-2"
+          className="hover:bg-secondary-200 transition-all duration-300 p-2 text-secondary-800 "
           to={"/auth"}
         >
-          <Logout />
-          خروج{" "}
+          <Logout text={"خروج"} />
         </Link>
       </div>
     </>

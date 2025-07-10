@@ -50,7 +50,7 @@ const Slider = ({ slidesData }) => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <Link to={'/projects'} className="projects cursor-pointer z-10">مشاهده همه</Link>
+      <Link to={'/projects'} className="projects cursor-pointer z-10 ">مشاهده همه</Link>
     </div>
   );
 };
