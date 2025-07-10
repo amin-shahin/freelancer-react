@@ -65,7 +65,14 @@ const MainHeader = () => {
             )}{" "}
           </div>
         </div>
-        <p>logo</p>
+        <Link to={"/"}>
+          <img
+            src="/public/images/freelancer-logo-light.svg"
+            className="h-8 invert dark:invert-0"
+            alt="logo"
+          />
+        </Link>
+
         <div className="md:hidden text-secondary-800 relative">
           {user ? (
             <div onClick={openUserMenu} className="relative cursor">
