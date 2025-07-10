@@ -12,7 +12,7 @@ const Projects = () => {
   return (
    <div className=" p-5 ">
     <h1 className="text-2xl font-bold text-shadow-secondary-900 text-start my-10 text-secondary-900">لیست پروژه ها</h1>
-     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-20">
+     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
       {projects.map((project) => (
         <div className="flex flex-col bg-secondary-100 justify-between items-center shadow-lg p-4 rounded-xl hover:shadow-2xl transition-all duration-500">
           <p className="text-secondary-900 font-bold text-xl mb-8">
