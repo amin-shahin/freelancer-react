@@ -20,13 +20,12 @@ import { useProjects } from "../features/projects/useProjects";
 
 function Home() {
   const { projects, isLoading } = useProjects();
-  console.log(projects);
-  
+
   useGSAP(() => {
     gsap.to(".text-top-site", {
       opacity: 1,
       y: 0,
-      duration: 2,
+      duration: 1,
     });
 
     gsap.to(".why-us", {
@@ -75,7 +74,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-screen-lg text-secondary-900 h-full w-full min-h-screen overflow-x-hidden">
+    <div className="mx-auto max-w-screen-lg text-secondary-900 h-full w-full min-h-screen overflow-x-hidden px-4">
       <div>
         <h1 className="text-top-site opacity-0 translate-y-12 text-secondary-900 font-black lg:text-4xl md:text-3xl  text-xl !my-20">
           پروژه ات رو به حرفه ای ها بسپار

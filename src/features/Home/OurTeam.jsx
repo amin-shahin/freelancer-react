@@ -30,9 +30,9 @@ const ourteamList = [
 ];
 const OurTeam = () => {
   return (
-    <div className="py-10 px-4">
+    <div className="py-10 px-4 ">
       <h2 className="badge text-4xl font-bold my-10 text-secondary-700 w-full text-start"> تیم ما</h2>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="w-2/3 md:w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mx-auto">
         {ourteamList.map((item) => (
           <div className="flex flex-col gap-y-3 items-center p-5 rounded-xl bg-secondary-50 dark:bg-secondary-100 shadow-xl transition duration-300 hover:shadow-2xl">
             <div className="rounded-full w-32 h-32 aspect-square overflow-hidden">
