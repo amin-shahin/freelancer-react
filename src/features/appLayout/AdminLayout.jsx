@@ -10,27 +10,28 @@ import AppLayoutDashboard from "./AppLayoutDashboard";
 
 function AdminLayout() {
   return (
-    <AppLayoutDashboard>
-      <DashboardSidebar>
-        <CustomNavLink href={"dashboard"}>
-          <HiHome />
-          <span>داشبورد</span>
-        </CustomNavLink>
+  
+      <AppLayoutDashboard>
+        <DashboardSidebar >
+          <CustomNavLink href={"dashboard"}>
+            <HiHome />
+            <span>داشبورد</span>
+          </CustomNavLink>
 
-        <CustomNavLink href={"projects"}>
-          <HiCollection />
-          <span>پروژه ها</span>
-        </CustomNavLink>
-        <CustomNavLink href={"proposals"}>
-          <HiOutlineViewGrid />
-          <span>درخواست ها</span>
-        </CustomNavLink>
-        <CustomNavLink href={"users"}>
-          <HiUser />
-          <span>کاربران </span>
-        </CustomNavLink>
-      </DashboardSidebar>
-    </AppLayoutDashboard>
+          <CustomNavLink href={"projects"}>
+            <HiCollection />
+            <span>پروژه ها</span>
+          </CustomNavLink>
+          <CustomNavLink href={"proposals"}>
+            <HiOutlineViewGrid />
+            <span>درخواست ها</span>
+          </CustomNavLink>
+          <CustomNavLink href={"users"}>
+            <HiUser />
+            <span>کاربران </span>
+          </CustomNavLink>
+        </DashboardSidebar>
+      </AppLayoutDashboard>
   );
 }
 

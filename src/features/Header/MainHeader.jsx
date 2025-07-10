@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useOutsideClick from "../../hooks/useOutsideClick";
 import { HiBars3 } from "react-icons/hi2";
 import ToggleTheme from "../Theme/ToggleTheme";
+import Logout from "../authentication/Logout";
 
 const MainHeader = () => {
   const { isLoading, user } = useUser();
@@ -38,6 +39,9 @@ const MainHeader = () => {
         </div>
 
         <div className="hidden md:flex gap-x-6">
+          <Link className="text-secondary-800" to={"/"}>
+            خانه{" "}
+          </Link>
           <Link className="text-secondary-800" to={"/about-us"}>
             درباره ما
           </Link>
@@ -49,7 +53,11 @@ const MainHeader = () => {
           </Link>
           <div className="text-secondary-800 relative !cursor-pointer">
             {user ? (
-              <button onClick={openUserMenu} type="button" className="relative !cursor-pointer">
+              <button
+                onClick={openUserMenu}
+                type="button"
+                className="relative !cursor-pointer"
+              >
                 {user?.name}
               </button>
             ) : (
@@ -59,14 +67,14 @@ const MainHeader = () => {
         </div>
         <p>logo</p>
         <div className="md:hidden text-secondary-800 relative">
-            {user ? (
-              <div onClick={openUserMenu} className="relative cursor">
-                {user?.name}
-              </div>
-            ) : (
-              <Link to={"/auth"}>ورود/ثبت نام</Link>
-            )}{" "}
-          </div>
+          {user ? (
+            <div onClick={openUserMenu} className="relative cursor">
+              {user?.name}
+            </div>
+          ) : (
+            <Link to={"/auth"}>ورود/ثبت نام</Link>
+          )}{" "}
+        </div>
       </div>
       <div
         className={` fixed inset-0 h-screen w-screen z-20  duration-1000 transition-all ${
@@ -90,6 +98,12 @@ const MainHeader = () => {
         >
           بستن
         </p>
+        <Link
+          className="hover:bg-secondary-200 transition-all duration-300 p-2 text-secondary-800"
+          to={"/"}
+        >
+          خانه
+        </Link>
         <Link
           className="hover:bg-secondary-200 transition-all duration-300 p-2 text-secondary-800"
           to={"/about-us"}
@@ -139,11 +153,18 @@ const MainHeader = () => {
           بستن
         </p>
 
-        <Link  className="hover:bg-secondary-200 transition-all duration-300 p-2 text-secondary-800" to={`${role?.toLowerCase()}/dashboard`}>داشبورد</Link>
         <Link
           className="hover:bg-secondary-200 transition-all duration-300 p-2 text-secondary-800"
+          to={`${role?.toLowerCase()}/dashboard`}
+        >
+          داشبورد
+        </Link>
+
+        <Link
+          className="hover:bg-secondary-200 transition-all duration-300 p-2 text-secondary-800 flex justify-center items-center gap-x-2"
           to={"/auth"}
         >
+          <Logout />
           خروج{" "}
         </Link>
       </div>
