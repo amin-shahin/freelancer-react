@@ -24,6 +24,7 @@ import NotFound from "./pages/NotFound";
 import MainAppLayout from "./features/appLayout/MainAppLayout";
 import AboutUs from "./pages/AboutUs";
 import Projects from "./pages/Projects";
+import ContactUs from "./pages/ContactUs";
 
 const queryClient = new QueryClient();
 function App() {
@@ -42,6 +43,7 @@ function App() {
                 />
               </Route>
               <Route path="/about-us" element={<AboutUs/>}/>
+              <Route path="/contact-us" element={<ContactUs/>}/>
               <Route path="/projects" element={<Projects/>}/>
             </Route>
 

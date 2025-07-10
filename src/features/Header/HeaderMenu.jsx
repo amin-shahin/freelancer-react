@@ -1,4 +1,4 @@
-import { HiOutlineSun, HiOutlineUser } from "react-icons/hi2";
+import {  HiOutlineUser } from "react-icons/hi2";
 import Logout from "../authentication/Logout";
 import ToggleTheme from "../Theme/ToggleTheme";
 import { Link } from "react-router";

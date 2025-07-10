@@ -291,3 +291,7 @@ table td {
   left: 30px;
   cursor: pointer;
 }
+
+.cursor{
+  cursor: pointer !important;
+}
