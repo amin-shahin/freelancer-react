@@ -54,11 +54,11 @@ class UserController extends Controller {
   }
   async verifyUser(req, res) {
     const { userId } = req.params;
-    let { status } = req.body;
+    let { status } = req.body;    
     status = Number(status);
     const updateResult = await UserModel.updateOne(
       { _id: userId },
-      { $set: { status } }
+      { $set: { status } } // 0, 1, 2
     );
 
     if (updateResult.modifiedCount === 0)

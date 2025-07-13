@@ -38,18 +38,18 @@ class userAuthController extends Controller {
 
     // send OTP
 
-    if (process.env.IS_TESTING_MODE_OTP) {
-      return res.status(HttpStatus.OK).send({
-        statusCode: HttpStatus.OK,
-        data: {
-          message: `کد تائید برای ورود تستی: ${this.code}`,
-          expiresIn: CODE_EXPIRES,
-          phoneNumber,
-        },
-      });
-    } else {
+    // if (process.env.IS_TESTING_MODE_OTP) {
+    //   return res.status(HttpStatus.OK).send({
+    //     statusCode: HttpStatus.OK,
+    //     data: {
+    //       message: `کد تائید برای ورود تستی: ${this.code}`,
+    //       expiresIn: CODE_EXPIRES,
+    //       phoneNumber,
+    //     },
+    //   });
+    // } else {
       this.sendOTP(phoneNumber, res);
-    }
+    // }
   }
   async checkOtp(req, res) {
     await checkOtpSchema.validateAsync(req.body);
@@ -74,7 +74,7 @@ class userAuthController extends Controller {
     // await setAuthCookie(res, user); // set httpOnly cookie
     await setAccessToken(res, user);
     await setRefreshToken(res, user);
-    let WELLCOME_MESSAGE = `کد تایید شد، به فرانت هوکس خوش آمدید`;
+    let WELLCOME_MESSAGE = `کد تایید شد، به شاهین هوکس خوش آمدید`;
     if (!user.isActive)
       WELLCOME_MESSAGE = `کد تایید شد، لطفا اطلاعات خود را تکمیل کنید`;
 
