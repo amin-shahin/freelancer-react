@@ -4,16 +4,24 @@ const {
   verifyAccessToken,
   isVerifiedUser,
 } = require("../http/middlewares/user.middleware");
+const expressAsyncHandler = require("express-async-handler");
 const { adminRoutes } = require("./admin/admin.routes");
 const { categoryRoutes } = require("./category");
 const { projectRoutes } = require("./project");
 const { proposalRoutes } = require("./proposal");
 const { userAuthRoutes } = require("./userAuth");
+const { ProjectController } = require("../http/controllers/project.controller");
+
 
 const router = require("express").Router();
 
 router.use("/user", userAuthRoutes);
 router.use("/category", categoryRoutes);
+// ✅ مسیر عمومی برای لیست پروژه‌ها
+router.get(
+  "/project/list",
+  expressAsyncHandler(ProjectController.getListOfProjects)
+);
 router.use(
   "/project",
   verifyAccessToken,

@@ -14,26 +14,38 @@ class Application {
   #DB_URI = process.env.APP_DB;
 
   constructor() {
-    this.createServer();
-    this.connectToDB();
-    this.configServer();
-    this.initClientSession();
-    this.configRoutes();
-    this.errorHandling();
+    this.connectToDB()
+    .then(() => {
+      this.configServer();
+      this.initClientSession();
+      this.configRoutes();
+      this.errorHandling();
+      this.createServer(); // ✅ سرور اینجا فقط وقتی راه‌اندازی می‌شه که اتصال DB موفق باشه
+    })
+    .catch((err) => {
+      console.error("❌ اتصال به دیتابیس ناموفق بود:", err.message);
+    });
+  }
+
+  connectToDB() {
+    return mongoose
+    .connect(this.#DB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then(() => console.log("✅ MongoDB connected!"))
+    .catch((err) => {
+      console.error("❌ Failed to connect to MongoDB", err.message);
+      throw err;
+    });
   }
   createServer() {
+    this.#app.get("/", (req, res) => {
+      res.send("Backend running successfully ✅");
+    });
     this.#app.listen(this.#PORT, () =>
       console.log(`listening on port ${this.#PORT}`)
     );
-  }
-  connectToDB() {
-    mongoose
-      .connect(this.#DB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
-      .then((res) => console.log("MongoDB connected!!"))
-      .catch((err) => console.log("Failed to connect to MongoDB", err));
   }
   configServer() {
     this.#app.use(
