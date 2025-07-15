@@ -4,28 +4,28 @@ const ourteamList = [
     role: "مدیر عامل",
     name: "دکتر آرمان فریلنسریان",
     desc: "موسس مجموعه فریلنسر",
-    img: "/public/images/ourteam/1.jpg",
+    img: "/images/ourteam/1.jpg",
   },
   {
     id: 2,
     role: "مدیر فروش",
     name: "دکتر نیما میختاریان",
     desc: "کارآفرین برتر سال",
-    img: "/public/images/ourteam/2.webp",
+    img: "/images/ourteam/2.webp",
   },
   {
     id: 3,
     role: "مدیر پشتیبانی",
     name: "دکتر مهسا صدر",
     desc: "بهترین پشتیبان غرب آسیا",
-    img: "/public/images/ourteam/3.jpg",
+    img: "/images/ourteam/3.jpg",
   },
   {
     id: 4,
     role: "مدیر رسانه",
     name: "دکتر رویا پارسا",
     desc: "دکتری رسانه از دانشگاه آکسفورد",
-    img: "/public/images/ourteam/4.jpg",
+    img: "/images/ourteam/4.jpg",
   },
 ];
 const OurTeam = () => {

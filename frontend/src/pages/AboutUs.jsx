@@ -1,7 +1,13 @@
 function AboutUs() {
   return (
     <div className="flex flex-col gap-y-4 px-4 text-secondary-800 text-start">
-      <img src="/public/images/free7.jpg" className="object-cover rounded-2xl shadow-2xl object-center w-full my-20" alt="" />
+      <div className="w-full h-full overflow-hidden my-20">
+        <img
+          src="/images/free7.jpg"
+          alt="banner"
+          className="w-full h-full object-cover rounded-2xl shadow-2xl object-center "
+        />
+      </div>
       <p>
         شرکت مدرن سامانه کارآفرین ایرانیان یک مجموعه فعال در زمینه ارائه خدمات
         فریلنسینگ و دورکاری، برونسپاری پروژه ها، و آموزش آنلاین است.

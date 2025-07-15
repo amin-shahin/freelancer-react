@@ -76,20 +76,23 @@ function Home() {
   return (
     <div className="mx-auto max-w-screen-lg text-secondary-900 h-full w-full min-h-screen overflow-x-hidden px-4">
       <div>
-        <h1 className="text-top-site opacity-0 translate-y-12 text-secondary-900 font-black lg:text-4xl md:text-3xl  text-xl !my-20">
+        <h1 className="text-top-site opacity-0 translate-y-12 text-secondary-900 font-black lg:text-4xl md:text-3xl  text-2xl pt-10 !my-20">
           پروژه ات رو به حرفه ای ها بسپار
         </h1>
-        <p className="text-lg mt-4 mb-10 text-start text-secondary-700">
+
+        <div className="w-full aspect-[16/9] overflow-hidden">
+          <img
+            src={"/images/output7.jpg"}
+            alt="banner"
+            className="w-full h-full rounded-xl object-cover object-center shadow-2xl"
+          />
+        </div>
+        <p className="lg:text-lg  mb-10 text-start text-secondary-700 mt-8">
           ما به شما این امکان را می‌دهیم که ایده‌هایتان را به واقعیت تبدیل کنید
           و به فریلنسرها این فرصت را می‌دهیم که مهارت‌های خود را به نمایش
           بگذارند. به جمع ما بپیوندید و تجربه‌ای جدید از همکاری‌های آنلاین را
           آغاز کنید! همین امروز ثبت‌نام کنید و پروژه‌های خود را شروع کنی
         </p>
-        <img
-          src={"/images/output7.jpg"}
-          className="rounded-xl object-cover object-center"
-          alt="banner"
-        />
       </div>
 
       <div className="px-4 mt-20">
@@ -97,7 +100,7 @@ function Home() {
           مزایای استفاده از سایت
         </h2>
 
-        <div className="grid grid-cols-1  lg:grid-cols-4 place-items-center gap-10 md:grid-cols-2 flex-wrap ">
+        <div className="grid grid-cols-1  lg:grid-cols-4 place-items-center gap-10 md:grid-cols-2 flex-wrap">
           <CardInfo
             id="card-gsap"
             Icon={HiOutlineShieldCheck}
@@ -153,10 +156,10 @@ function Home() {
       </div>
 
       <div className="text-start why-us opacity-0 -translate-y-20">
-        <h2 className="text-start text-secondary-700 text-3xl font-bold mb-10">
+        <h2 className="text-start text-secondary-700 text-3xl font-bold mt-20">
           چرا ما؟
         </h2>
-        <p>
+        <p className="mb-5">
           ما به شما این امکان را می‌دهیم که به راحتی فریلنسرهای با استعداد و با
           تجربه را پیدا کنید و از خدمات آن‌ها بهره‌مند شوید. با ما، شما
           می‌توانید:
@@ -207,7 +210,7 @@ function Home() {
       </div>
 
       <OurTeam />
-      <Slider slidesData={projects} />
+      {projects && <Slider slidesData={projects} />}
     </div>
   );
 }

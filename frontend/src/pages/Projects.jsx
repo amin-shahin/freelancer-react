@@ -6,12 +6,13 @@ import { toPersianNumbersWithComma } from "../utils/convertToPersianNumber";
 
 const Projects = () => {
   const { isLoading, projects } = useProjects();
-  const {user} = useUser()
+  const {user} = useUser();
+  
   if (isLoading) return <Loader />;
 
   return (
    <div className=" p-5 ">
-    <h1 className="text-2xl font-bold text-shadow-secondary-900 text-start my-10 text-secondary-900">لیست پروژه ها</h1>
+    <h1 className="text-2xl font-bold text-shadow-secondary-900 text-start my-10 pt-10 text-secondary-900">لیست پروژه ها</h1>
      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
       {projects.map((project) => (
         <div className="flex flex-col bg-secondary-100 justify-between items-center shadow-lg p-4 rounded-xl hover:shadow-2xl transition-all duration-500">
@@ -29,7 +30,7 @@ const Projects = () => {
             <p className="mt-3">
               {project.tags &&
                 project.tags.map((tag) => (
-                  <span className="badge badge--secondary p-2 mx-1 text-xs">
+                  <span className="badge badge--primary p-2 mx-1 text-xs">
                     {tag}
                   </span>
                 ))}
@@ -38,7 +39,7 @@ const Projects = () => {
           <p className="btn btn--outline mt-4">
             {toPersianNumbersWithComma(project?.budget)} تومان
           </p>
-          {!user && <Link to={'/auth'} className="badge badge--secondary p-1">جهت ثبت درخواست وارد حساب کاربری خود شوید</Link>}
+          {!user && <Link to={'/auth'} className="bg-sky-100 text-sky-400 dark:bg-secondary-50 dark:text-secondary-700  rounded-lg p-1.5 mt-4 text-sm sm:text-xs md:text-sm">جهت ثبت درخواست وارد حساب کاربری خود شوید</Link>}
           {
             user && user.role === 'FREELANCER' && <Link to={'/freelancer/projects'} className="btn btn--primary w-full mt-4">درخواست انجام پروژه</Link>
           }

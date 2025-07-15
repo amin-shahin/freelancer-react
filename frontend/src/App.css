@@ -179,7 +179,12 @@ button:disabled {
 @utility shadow-card {
   @apply shadow-[0px_6px_40px_-5px_rgba(0,_0,_0,_0.1)];
 }
-
+@utility shadow-light {
+  @apply shadow-[0px_2px_6px_3px_rgba(60,_64,_67,_0.15)]
+}
+@utility height-screen-minus-footer {
+  height: calc(100vh - 100px);
+}
 /* inupt number */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -245,7 +250,7 @@ table td {
   flex-direction: column;
   justify-content: space-between !important;
   gap: 8px;
-  background: linear-gradient(to top, var(--color-secondary-500), transparent);
+  background: linear-gradient(to top,var(--color-secondary-300), var(--color-secondary-200),var(--color-secondary-100), transparent);
   padding: 20px;
   border-radius: 12px;
   /* Center slide text vertically */

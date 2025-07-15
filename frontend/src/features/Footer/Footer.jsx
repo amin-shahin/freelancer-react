@@ -10,8 +10,8 @@ const Footer = () => {
     <footer className="!py-5 sm:px-10 !px-5">
       <div className="bg-neutral-700 h-[1px] w-full !my-5"></div>
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between">
-        <div className="flex">
+      <div className="flex flex-col gap-y-4 md:flex-row md:items-center justify-between">
+        <div className="flex justify-center">
           {footerLinks.map((link, i) => (
             <Link
               to={link.to}

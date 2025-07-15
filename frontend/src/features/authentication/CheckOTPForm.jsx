@@ -64,7 +64,7 @@ function CheckOTPForm({
   };
 
   return (
-    <div>
+    <div className="w-full flex justify-center items-center  bg-secondary-0 text-secondary-800 height-screen-minus-footer">
       <form className="flex flex-col gap-5" onSubmit={checkOtpHandler}>
         {sendOtpResponse && (
           <div className="text-start ">

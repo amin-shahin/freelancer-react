@@ -26,7 +26,6 @@ function CompleteProfileForm() {
   });
 
   const completeProfileHandler = async (data) => {
-    // e.preventDefault();
     console.log(data);
 
     try {
@@ -56,7 +55,7 @@ function CompleteProfileForm() {
   };
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-full flex justify-center items-center height-screen-minus-footer text-secondary-800">
       <form
         className="w-full flex flex-col gap-4 sm:max-w-sm"
         onSubmit={handleSubmit(completeProfileHandler)}
